@@ -1,3 +1,4 @@
+using Garage3._0.Data;
 using Garage3._0.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,18 +8,24 @@ namespace Garage3._0.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly GarageDbContext _context;
+        private readonly GarageManager _manager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, GarageDbContext context,GarageManager manager)
         {
             _logger = logger;
+            _context = context;
+            _manager = manager;
         }
 
         public IActionResult Index() {
             // var v = new Vehicle();
 
             // var e = v.VehicleType.VehicleTypeName;
-            
-            
+            Vehicle vehicle = new Vehicle();
+            vehicle.VehicleType = new VehicleType();
+            vehicle.VehicleType.ParkingSpaceRequirement = 2;
+            _manager.ParkVehicle(vehicle);
             return View();
         }
 

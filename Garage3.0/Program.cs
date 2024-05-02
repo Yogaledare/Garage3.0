@@ -1,4 +1,5 @@
 using Garage3._0.Data;
+using Garage3._0.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<GarageDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GarageContext")));
+//add garagemanager to service, the file will only initialize once 
+builder.Services.AddScoped<GarageManager>();
 
 var app = builder.Build();
 
