@@ -15,7 +15,8 @@ public class GarageDbContext : DbContext {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        
+        
         // Seed data method calls
         SeedVehicleTypes(modelBuilder);
         SeedVehicles(modelBuilder);

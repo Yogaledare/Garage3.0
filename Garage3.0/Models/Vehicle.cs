@@ -8,7 +8,12 @@ public class Vehicle {
     public string? Brand { get; set; }
     public string? Model { get; set; }
     public int NumWheels { get; set; }
+    //Entities relations
     public int VehicleTypeId { get; set; }
     public VehicleType VehicleType { get; set; }
+    public int MemberId { get; set; }
+    public Member  Member { get; set; }
+    public int ParkingEventID { get; set; } //nullable?
+    public ParkingEvent ParkingEvent { get; set; } //nullable
 }
 
