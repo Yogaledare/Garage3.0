@@ -1,6 +1,9 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Garage3._0.Data;
+using Garage3._0.Controllers;
+using Garage3._0.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
