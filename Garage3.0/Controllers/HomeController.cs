@@ -14,6 +14,11 @@ namespace Garage3._0.Controllers
         }
 
         public IActionResult Index() {
+            // var v = new Vehicle();
+
+            // var e = v.VehicleType.VehicleTypeName;
+            
+            
             return View();
         }
 

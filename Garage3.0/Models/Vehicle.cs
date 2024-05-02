@@ -10,10 +10,12 @@ public class Vehicle {
     public int NumWheels { get; set; }
     //Entities relations
     public int VehicleTypeId { get; set; }
+    
+    //nav prop
     public VehicleType VehicleType { get; set; }
     public int MemberId { get; set; }
     public Member  Member { get; set; }
-    public int ParkingEventID { get; set; } //nullable?
-    public ParkingEvent ParkingEvent { get; set; } //nullable
+    // public int? ParkingEventID { get; set; } //nullable?
+    public ParkingEvent? ParkingEvent { get; set; } //nullable
 }
 

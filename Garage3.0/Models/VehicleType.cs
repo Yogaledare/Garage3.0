@@ -4,6 +4,8 @@ public class VehicleType {
     public int VehicleTypeId { get; set; }
     public string VehicleTypeName { get; set; }
     public int ParkingSpaceRequirement { get; set; }
+    
+    //nav prop
     public List<Vehicle> Vehicles { get; set; } = []; 
 }
 
