@@ -35,16 +35,16 @@ public class MembersController : Controller {
     {
         if (ModelState.IsValid)
         {
-            var member = new Member
-            {
-                SocialSecurityNr = model.SocialSecurityNr,
-                Firstname = model.Firstname,
-                Surname = model.Surname,
-                VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition
-            };
+            // var member = new Member
+            // {
+            //     SocialSecurityNr = model.SocialSecurityNr,
+            //     Firstname = model.Firstname,
+            //     Surname = model.Surname,
+            //     VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition
+            // };
 
-            _context.Members.Add(member);
-            _context.SaveChanges();
+            // _context.Members.Add(member);
+            // _context.SaveChanges();
             return RedirectToAction(nameof(Index)); // Redirect to the index or another appropriate view
         }
         return View(model);

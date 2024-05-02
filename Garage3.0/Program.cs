@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddFluentValidationAutoValidation();
 // builder.Services.AddFluentValidationClientsideAdapters();
-// builder.Services.AddValidatorsFromAssemblyContaining<Program>(); 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(); 
 
 
 builder.Services.AddDbContext<GarageDbContext>(options =>
