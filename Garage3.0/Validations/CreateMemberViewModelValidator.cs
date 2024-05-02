@@ -5,8 +5,8 @@ namespace Garage3._0.Validations;
 
 public class CreateMemberViewModelValidator : AbstractValidator<CreateMemberViewModel> {
     public CreateMemberViewModelValidator() {
-        var minLength = 2;
-        var maxLength = 50;
+        const int minLength = 2;
+        const int maxLength = 50;
 
         RuleFor(x => x.Firstname)
             .NotEmpty()
