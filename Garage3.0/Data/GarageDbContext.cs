@@ -21,7 +21,9 @@ public class GarageDbContext : DbContext {
         modelBuilder.Entity<Vehicle>()
             .HasOne(v => v.ParkingEvent)
             .WithOne(p => p.Vehicle)
-            .HasForeignKey<ParkingEvent>(p => p.VehicleID);
+            .HasForeignKey<ParkingEvent>(p => p.VehicleID)
+            .IsRequired(true)
+            ;
         
         // Seed data method calls
         //SeedVehicleTypes(modelBuilder);
