@@ -31,7 +31,7 @@ namespace Garage3._0.Models
             currentUsedSpots.UnionWith(new int[] { 1, 4, 5, 7, 9 });
             string output = string.Join(", ", currentUsedSpots);
             Console.WriteLine("Current Used Spots " + output);
-            
+
         }
         public void ParkVehicle(Vehicle vehicle)
         {
@@ -45,6 +45,25 @@ namespace Garage3._0.Models
             {
                 string output = string.Join(", ", availableSpots);
                 Console.WriteLine("The Frist empty spot are " + output);
+                //actual implementation 
+                var tempSpotsList = new List<ParkingPlace>();
+                ParkingEvent parkingEvent = new ParkingEvent();
+                foreach (var s in availableSpots)
+                {
+                    var place = new ParkingPlace { ParkingPlaceNr = s };
+                    place.ParkingEvent = parkingEvent;
+                    place.ParkingEventID = parkingEvent.ParkingEventID;
+                    tempSpotsList.Add(place);
+                }
+                parkingEvent.VehicleID = vehicle.VehicleId;
+                parkingEvent.Vehicle = vehicle;
+                parkingEvent.ParkingPlaces = tempSpotsList;
+                parkingEvent.ArrivalTime = DateTime.Now;
+
+                //Add to database
+                _context.parkingPlaces.AddRange(tempSpotsList);
+                _context.ParkingEvents.AddRange(parkingEvent);
+                _context.SaveChanges();
             }
         }
 
@@ -63,7 +82,7 @@ namespace Garage3._0.Models
                     else
                     {
                         bool spotFound = true;
-                        for (int j = i + 1; j <= i + placeTaken-1; j++)
+                        for (int j = i + 1; j <= i + placeTaken - 1; j++)
                         {
                             if (i % limitedWidth == 0)
                             {

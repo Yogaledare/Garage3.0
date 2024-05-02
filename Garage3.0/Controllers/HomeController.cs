@@ -22,10 +22,12 @@ namespace Garage3._0.Controllers
             // var v = new Vehicle();
 
             // var e = v.VehicleType.VehicleTypeName;
-            Vehicle vehicle = new Vehicle();
-            vehicle.VehicleType = new VehicleType();
-            vehicle.VehicleType.ParkingSpaceRequirement = 2;
-            _manager.ParkVehicle(vehicle);
+
+            ////Parking logic test
+            //Vehicle vehicle = new Vehicle();
+            //vehicle.VehicleType = new VehicleType();
+            //vehicle.VehicleType.ParkingSpaceRequirement = 2;
+            //_manager.ParkVehicle(vehicle);
             return View();
         }
 
