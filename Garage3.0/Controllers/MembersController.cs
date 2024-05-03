@@ -53,9 +53,34 @@ public class MembersController : Controller {
     // }
 
 
+    public IActionResult CreateVehicleType(int memberId) {
+
+        var model = new CreateVehicleTypeViewModel {
+            MemberId = memberId
+        };
+        
+        return View(model); 
+    }
+    
+    
+    [HttpPost]
+    public IActionResult CreateVehicleType(CreateVehicleTypeViewModel model) {
+
+        if (ModelState.IsValid) {
+
+            Console.WriteLine("hello!");
+            return RedirectToAction("CreateVehicle", "Members", new { memberId = model.MemberId });
+        }
+
+        return View(model); 
+    }
+    
+    
+    
+
     // GET: Members/5/RegisterVehicle
     [HttpGet("Members/{memberId:int}/CreateVehicle")]
-    public IActionResult CreateVehicle([FromQuery] int memberId) {
+    public IActionResult CreateVehicle(int memberId) {
         var vehicleTypes = _context.VehicleTypes
             .Select(vt => new SelectListItem {
                 Text = vt.VehicleTypeName,

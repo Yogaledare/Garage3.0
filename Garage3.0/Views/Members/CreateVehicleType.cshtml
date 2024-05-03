@@ -1,8 +1,58 @@
 ﻿@model Garage3._0.Models.ViewModels.CreateVehicleTypeViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Create Vehicle Type";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Create Vehicle Type</h2>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="CreateVehicleType" asp-controller="Members" method="post">
+            <input type="hidden" name="memberId" value="@Model.MemberId"/>
+            <div class="form-group">
+                <label asp-for="VehicleTypeName">Vehicle Type Name</label>
+                <input asp-for="VehicleTypeName" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParkingSpaceRequirement">Parking Space Requirement</label>
+                <input asp-for="ParkingSpaceRequirement" type="number" class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label>Allowed Wheel Numbers</label>
+                <div id="wheelNumbers">
+                    <!-- Initially empty, filled by JavaScript -->
+                </div>
+                @* <div class="row align-content-end"> *@
+                <button class="btn-warning btn" type="button" onclick="addWheelNumber()">Add Wheel Number</button>
+                @* </div> *@
+            </div>
+            @* <div class="row justify-content-start my-3"> *@
+            <div class="btn-group my-3" role="group">
+            @* <div class="my-3"> *@
+                <button type="submit" class="btn btn-primary me-3">Create</button>
+                @* </div> *@
+                <a href="@Url.Action("CreateVehicle", "Members", new {memberId = Model.MemberId})" class="btn btn-secondary">Go Back</a>
+            </div>
+            @* </div> *@
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addWheelNumber() {
+            var container = document.getElementById('wheelNumbers');
+            var input = document.createElement('input');
+            input.type = 'number';
+            input.name = 'AllowedWheelNumbers';
+            input.className = 'form-control';
+            input.style.marginBottom = '10px';
+            container.appendChild(input);
+        }
+    </script>
+}
