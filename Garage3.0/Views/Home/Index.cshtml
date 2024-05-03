@@ -17,7 +17,7 @@
             <tr>
                 <td>@item.Firstname @item.Surname</td>
                 <td>@item.MemberId</td>
-                <td>@string.Join(", ", item.VehicleList.Select(v => $"{v.LicencePlate} - {v.MemberId}"))</td>
+                <td>@string.Join(", ", item.VehicleList.Select(v => $"{v.LicencePlate} - {v.VehicleId}"))</td>
             </tr>
         }
     </tbody>

@@ -8,6 +8,8 @@ namespace Garage3._0.Data
         public Faker<Member> MemberFaker { get; set; }
         public Faker<Vehicle> VehicleFaker { get; set; }
         public Faker<VehicleType> VehicleTypeFaker { get; set; }
+        private static int _nextMemberId = 1;
+        private static int _nextVehicleId = 1;
 
         public FakeDataGenerator()
         {
@@ -19,7 +21,7 @@ namespace Garage3._0.Data
                          {
                              var member = new Member
                              {
-                                 MemberId = f.Random.Int(1, 11),
+                                 MemberId = _nextMemberId++,
                                  SocialSecurityNr = GenerateBirthdayCode(f),
                                  Firstname = f.Name.FirstName(),
                                  Surname = f.Name.LastName(),
@@ -34,12 +36,12 @@ namespace Garage3._0.Data
                                  var vehicle = vehicleFaker.Generate();
                                  member.VehicleList.Add(vehicle);
                              }
-
+                              
                              return member;
                          });
 
         }
-
+ 
         public Faker<Vehicle> CreateVehicleFaker(Member member)
         {
             var vehicleTypes = new List<VehicleType>
@@ -53,7 +55,7 @@ namespace Garage3._0.Data
                 {
                     var vehicle = new Vehicle
                     {
-                        VehicleId = f.Random.Int(1, 50),
+                        VehicleId = _nextVehicleId++,
                         LicencePlate = f.Random.Replace("???###"),
                         Color = f.Commerce.Color(),
                         Brand = f.Vehicle.Manufacturer(),
