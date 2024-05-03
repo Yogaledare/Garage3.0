@@ -28,7 +28,12 @@ namespace Garage3._0.Controllers
             //vehicle.VehicleType = new VehicleType();
             //vehicle.VehicleType.ParkingSpaceRequirement = 2;
             //_manager.ParkVehicle(vehicle);
-            return View();
+
+            //data seeding test
+            var generator = new FakeDataGenerator();
+            var member = generator.GenerateMember(10);
+
+            return View(member);
         }
 
         public IActionResult Privacy()

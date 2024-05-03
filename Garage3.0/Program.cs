@@ -20,6 +20,8 @@ builder.Services.AddDbContext<GarageDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GarageContext")));
 //Add service about garage manager
 builder.Services.AddScoped<GarageManager>();
+//Add service for fake data
+//builder.Services.AddTransient<FakeDataGenerator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
