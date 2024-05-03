@@ -1,0 +1,50 @@
+﻿@model Garage3._0.Models.ViewModels.CreateVehicleViewModel
+
+@{
+    ViewBag.Title = "Register Vehicle";
+    Layout = "_Layout";
+}
+
+<h2>Register Vehicle</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CreateVehicle" asp-controller="Members" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="LicencePlate" class="control-label"></label>
+                <input asp-for="LicencePlate" class="form-control" />
+                <span asp-validation-for="LicencePlate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Color" class="control-label"></label>
+                <input asp-for="Color" class="form-control" />
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumWheels" class="control-label"></label>
+                <input asp-for="NumWheels" type="number" class="form-control" />
+                <span asp-validation-for="NumWheels" class="text-danger"></span>
+            </div>
+
+            <div class="form-group my-2">
+                <input type="submit" value="Register" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>

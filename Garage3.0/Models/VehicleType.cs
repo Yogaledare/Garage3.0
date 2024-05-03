@@ -6,6 +6,6 @@ public class VehicleType {
     public int ParkingSpaceRequirement { get; set; }
     
     //nav prop
-    public List<Vehicle> Vehicles { get; set; } = []; 
+    public List<Vehicle> Vehicles { get; set; } = [];
+    public ICollection<WheelConfiguration> WheelConfigurations { get; set; } = []; 
 }
-

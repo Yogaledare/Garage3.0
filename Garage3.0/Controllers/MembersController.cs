@@ -24,14 +24,14 @@ public class MembersController : Controller {
     }
 
     // GET: Members/Create
-    public IActionResult Create() {
+    public IActionResult CreateMember() {
         return View();
     }
 
     // POST: Members/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(CreateMemberViewModel model)
+    public IActionResult CreateMember(CreateMemberViewModel input)
     {
         if (ModelState.IsValid)
         {
@@ -47,8 +47,31 @@ public class MembersController : Controller {
             // _context.SaveChanges();
             return RedirectToAction(nameof(Index)); // Redirect to the index or another appropriate view
         }
-        return View(model);
+        Console.WriteLine("inside create member model state invalid");
+        return View(input);
     }
+
+
+
+    public IActionResult CreateVehicle() {
+        return View(); 
+    }
+    
+    
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CreateVehicle(CreateVehicleViewModel input)
+    {
+        if (ModelState.IsValid)
+        {
+            return RedirectToAction(nameof(Index)); 
+        }
+        Console.WriteLine("inside create vehicle model state invalid");
+        return View(input);
+    }
+    
+    
     
     
 }
