@@ -12,40 +12,68 @@ namespace Garage3._0.Data
         public FakeDataGenerator()
         {
             Randomizer.Seed = new Random(123);
-            var vehicleTypes = new List<VehicleType>
-            {
-                new VehicleType { VehicleTypeName = "Car", ParkingSpaceRequirement = 1, Vehicles = new List<Vehicle>() },
-                new VehicleType { VehicleTypeName = "Truck", ParkingSpaceRequirement = 2 ,Vehicles = new List<Vehicle>()},
-                new VehicleType { VehicleTypeName = "Bus", ParkingSpaceRequirement = 3 , Vehicles = new List < Vehicle >()}
-            };
 
-            VehicleFaker = new Faker<Vehicle>()
-                .CustomInstantiator(f =>
-                              {
-                                  var vehicle = new Vehicle
-                                  {
-                                      //???###" means three random uppercase letters and three random numbers
-                                      LicencePlate = f.Random.Replace("???###"),
-                                      Color = f.Commerce.Color(),
-                                      Brand = f.Vehicle.Manufacturer(),
-                                      Model = f.Vehicle.Model(),
-                                      NumWheels = 4,
-                                  };
-                                  var vehicleType = f.PickRandom(vehicleTypes);
-                                  vehicle.VehicleType = vehicleType;
-                                  vehicleType.Vehicles.Add(vehicle);
-                                  return vehicle;
-                              });
 
             MemberFaker = new Faker<Member>()
-            .RuleFor(m => m.Firstname, f => f.Name.FirstName())
-            .RuleFor(m => m.Surname, f => f.Name.LastName())
-            .RuleFor(m => m.VehicleList, f => VehicleFaker.Generate(f.Random.Int(1, 5))) 
-            .RuleFor(m => m.SocialSecurityNr, f => GenerateBirthdayCode(f)); 
+                         .CustomInstantiator(f =>
+                         {
+                             var member = new Member
+                             {
+                                 MemberId = f.Random.Int(1, 11),
+                                 SocialSecurityNr = GenerateBirthdayCode(f),
+                                 Firstname = f.Name.FirstName(),
+                                 Surname = f.Name.LastName(),
+                                 VehicleList = new List<Vehicle>()
+                             };
 
 
+                             int numberOfVehicles = f.Random.Int(1, 5);
+                             for (int i = 0; i < numberOfVehicles; i++)
+                             {
+                                 var vehicleFaker = CreateVehicleFaker(member);
+                                 var vehicle = vehicleFaker.Generate();
+                                 member.VehicleList.Add(vehicle);
+                             }
+
+                             return member;
+                         });
 
         }
+
+        public Faker<Vehicle> CreateVehicleFaker(Member member)
+        {
+            var vehicleTypes = new List<VehicleType>
+            {
+                new VehicleType { VehicleTypeId = 1,VehicleTypeName = "Car", ParkingSpaceRequirement = 1, Vehicles = new List<Vehicle>() },
+                new VehicleType { VehicleTypeId = 2, VehicleTypeName = "Truck", ParkingSpaceRequirement = 2 ,Vehicles = new List<Vehicle>()},
+                new VehicleType {  VehicleTypeId = 3,VehicleTypeName = "Bus", ParkingSpaceRequirement = 3 , Vehicles = new List < Vehicle >()}
+            };
+            return new Faker<Vehicle>()
+                .CustomInstantiator(f =>
+                {
+                    var vehicle = new Vehicle
+                    {
+                        VehicleId = f.Random.Int(1, 50),
+                        LicencePlate = f.Random.Replace("???###"),
+                        Color = f.Commerce.Color(),
+                        Brand = f.Vehicle.Manufacturer(),
+                        Model = f.Vehicle.Model(),
+                        NumWheels = 4,
+                        MemberId = member.MemberId,
+                        Member = member
+                    };
+
+                    var vehicleType = f.PickRandom(vehicleTypes);
+                    vehicle.VehicleType = vehicleType;
+                    vehicle.VehicleTypeId = vehicleType.VehicleTypeId;
+                    vehicleType.Vehicles.Add(vehicle);
+
+                    vehicle.ParkingEvent = null;
+
+                    return vehicle;
+                });
+        }
+
         private int GenerateBirthdayCode(Faker faker)
         {
             int year = faker.Date.Between(new DateTime(1950, 1, 1), new DateTime(2000, 12, 31)).Year;
