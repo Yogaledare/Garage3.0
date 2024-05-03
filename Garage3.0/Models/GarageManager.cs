@@ -27,13 +27,13 @@ namespace Garage3._0.Models
             //        currentUsedSpots.Add(p);
             //    }
             //}
-            Console.WriteLine("Initalizin!!!!!!!!!");
-            currentUsedSpots.UnionWith(new int[] { 1, 4, 5, 7, 9 });
-            string output = string.Join(", ", currentUsedSpots);
-            Console.WriteLine("Current Used Spots " + output);
+            //Console.WriteLine("Initalizin!!!!!!!!!");
+            //currentUsedSpots.UnionWith(new int[] { 1, 4, 5, 7, 9 });
+            //string output = string.Join(", ", currentUsedSpots);
+            //Console.WriteLine("Current Used Spots " + output);
 
         }
-        public void ParkVehicle(Vehicle vehicle)
+        public ParkingEvent? ParkVehicle(Vehicle vehicle)
         {
             //en 5x10 garage
             //random place
@@ -61,9 +61,14 @@ namespace Garage3._0.Models
                 parkingEvent.ArrivalTime = DateTime.Now;
 
                 //Add to database
-                _context.parkingPlaces.AddRange(tempSpotsList);
-                _context.ParkingEvents.AddRange(parkingEvent);
-                _context.SaveChanges();
+                //_context.parkingPlaces.AddRange(tempSpotsList);
+                //_context.ParkingEvents.AddRange(parkingEvent);
+                //_context.SaveChanges();
+                return parkingEvent;
+            }
+            else
+            {
+                return null;
             }
         }
 

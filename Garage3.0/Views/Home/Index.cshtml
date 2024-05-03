@@ -1,9 +1,10 @@
-﻿@model List<Member>
+﻿@model ParkingEvent
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<table border="1">
+
+@* <table border="1">
     <thead>
         <tr>
             <th>Member</th>
@@ -22,3 +23,22 @@
         }
     </tbody>
 </table>
+ *@
+ <table border="2">
+     <thead>
+         <tr>
+             <th>Vehicle Type</th>
+             <th>Total place taken</th>
+         </tr>
+     </thead>
+     <tbody>
+        <tr>
+            <td>
+                @Model.Vehicle.VehicleType.VehicleTypeName
+            </td>
+            <td>
+                @Model.ParkingPlaces.Count()
+            </td>
+        </tr>
+    </tbody>
+ </table>
