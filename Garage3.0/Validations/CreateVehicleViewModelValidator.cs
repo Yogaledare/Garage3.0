@@ -12,7 +12,7 @@ public class CreateVehicleViewModelValidator : AbstractValidator<CreateVehicleVi
         RuleFor(x => x.Brand)
             .NotEmpty().WithMessage("Brand is required.");
 
-        
+        // RuleFor(x => x.)
         
         
         
