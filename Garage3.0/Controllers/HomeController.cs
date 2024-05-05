@@ -30,18 +30,19 @@ namespace Garage3._0.Controllers
             //_manager.ParkVehicle(vehicle);
 
             //data seeding test
-            var generator = new FakeDataGenerator();
-            var member = generator.GenerateMember(10);
-            var m = member.First();
-            var v = m.VehicleList.First();
-            var vt = v.VehicleType;
-            var result =  _manager.ParkVehicle(v);
-            if(result != null)
-            {
-                //show data
-                return View(result);
-            }
-            
+            //var generator = new FakeDataGenerator();
+            //var member = generator.GenerateMember(10);
+            //var m = member.First();
+            //var v = m.VehicleList.First();
+            //var vt = v.VehicleType;
+            //var result =  _manager.ParkVehicle(v);
+            //if(result != null)
+            //{
+            //    //show data
+            //    return View(result);
+            //}
+            var seedData = new SeedDataGenerator(_context);
+            seedData.Generate();
             return View();
         }
 
