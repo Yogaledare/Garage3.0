@@ -1,6 +1,7 @@
 using Garage3._0.Data;
 using Garage3._0.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Garage3._0.Controllers
@@ -30,19 +31,23 @@ namespace Garage3._0.Controllers
             //_manager.ParkVehicle(vehicle);
 
             //data seeding test
-            var generator = new FakeDataGenerator();
-            var member = generator.GenerateMember(10);
-            var m = member.First();
-            var v = m.VehicleList.First();
-            var vt = v.VehicleType;
-            var result =  _manager.ParkVehicle(v);
-            if(result != null)
-            {
-                //show data
-                return View(result);
-            }
-            
-            return View();
+            //var generator = new FakeDataGenerator();
+            //var member = generator.GenerateMember(10);
+            //var m = member.First();
+            //var v = m.VehicleList.First();
+            //var vt = v.VehicleType;
+            //var result =  _manager.ParkVehicle(v);
+            //if(result != null)
+            //{
+            //    //show data
+            //    return View(result);
+            //}
+            //data seeding!
+            //var seedData = new SeedDataGenerator(_context);
+            //seedData.Generate();
+
+            var result = _context.Members.Include(m=>m.VehicleList);
+            return View(result);
         }
 
         public IActionResult Privacy()
