@@ -1,6 +1,7 @@
 using Garage3._0.Data;
 using Garage3._0.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Garage3._0.Controllers
@@ -41,9 +42,12 @@ namespace Garage3._0.Controllers
             //    //show data
             //    return View(result);
             //}
-            var seedData = new SeedDataGenerator(_context);
-            seedData.Generate();
-            return View();
+            //data seeding!
+            //var seedData = new SeedDataGenerator(_context);
+            //seedData.Generate();
+
+            var result = _context.Members.Include(m=>m.VehicleList);
+            return View(result);
         }
 
         public IActionResult Privacy()

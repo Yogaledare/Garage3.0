@@ -1,5 +1,43 @@
-﻿@model ParkingEvent
+﻿@model IEnumerable<Member>
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
+<div>
+    <table class="table">
+        <tr>
+            <th>Owner</th>
+            <th>License Plate</th>
+            <th>Register</th>
+            <th>Unregister</th>
+        </tr>
+        @foreach (var member in Model)
+        {
+            foreach (var vehicle in member.VehicleList)
+            {
+                <tr>
+                    <td>@member.Firstname @member.Surname</td>
+                    <td>@vehicle.LicencePlate</td>
+                    <td>
+                        @if (vehicle.ParkingEvent == null)
+                        {
+                            using (Html.BeginForm("Login", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
+                            {
+                                <button type="submit" class="btn btn-success">Login</button>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (vehicle.ParkingEvent != null)
+                        {
+                            using (Html.BeginForm("Logout", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
+                            {
+                                <button type="submit" class="btn btn-danger">Logout</button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
