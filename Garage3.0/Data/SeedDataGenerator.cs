@@ -22,16 +22,77 @@ namespace Garage3._0.Data
                 Console.WriteLine("Database already contains data. Skipping data generation.");
                 return;
             }
-            var vehicleTypes = new List<VehicleType>
-            {
-                new VehicleType { VehicleTypeName = "Car", ParkingSpaceRequirement = 1, Vehicles = new List<Vehicle>() },
-                new VehicleType { VehicleTypeName = "Truck", ParkingSpaceRequirement = 2 ,Vehicles = new List<Vehicle>()},
-                new VehicleType {  VehicleTypeName = "Bus", ParkingSpaceRequirement = 3 , Vehicles = new List < Vehicle >()}
+
+            List<WheelConfiguration> wheelConfigurations = [
+                new WheelConfiguration {
+                    NumWheels = 4
+                }, 
+                new WheelConfiguration {
+                    NumWheels = 6
+                }, 
+                new WheelConfiguration {
+                    NumWheels = 8
+                }, 
+                new WheelConfiguration {
+                    NumWheels = 10
+                },
+                new WheelConfiguration {
+                NumWheels = 12
+                }
+            ];
+
+            var vehicleTypes = new List<VehicleType> {
+                new VehicleType {
+                    VehicleTypeName = "Car", 
+                    ParkingSpaceRequirement = 1,
+                    Vehicles = new List<Vehicle>(),
+                    WheelConfigurations = [
+                        new WheelConfiguration {
+                            NumWheels = 4
+                        }
+                    ]
+                },
+                new VehicleType {
+                    VehicleTypeName = "Truck", 
+                    ParkingSpaceRequirement = 2, 
+                    Vehicles = new List<Vehicle>(),
+                    WheelConfigurations = [
+                        new WheelConfiguration {
+                            NumWheels = 4
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 6
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 8
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 10
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 12
+                        }, 
+                    ]
+                },
+                new VehicleType {
+                    VehicleTypeName = "Bus",
+                    ParkingSpaceRequirement = 3,
+                    Vehicles = new List<Vehicle>(), 
+                    WheelConfigurations = [
+                        new WheelConfiguration {
+                            NumWheels = 4
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 6
+                        }, 
+                        new WheelConfiguration {
+                            NumWheels = 8
+                        }, 
+                    ]
+                }
             };
-            for(int i =0; i < 10; i++)
-            {
-                var member = new Member
-                {
+            for (int i = 0; i < 10; i++) {
+                var member = new Member {
                  
                     SocialSecurityNr = GenerateBirthdayCode(faker),
                     Firstname = faker.Name.FirstName(),

@@ -18,6 +18,9 @@
                 </select>
                 <span asp-validation-for="VehicleTypeId" class="text-danger"></span>
             </div>
+            <a href="@Url.Action("CreateVehicleType", "Members", new { memberId = Model.MemberId })">
+                Vehicle not here? Create a new vehicle type
+            </a>
             <div class="form-group">
                 <label asp-for="LicencePlate" class="control-label"></label>
                 <input asp-for="LicencePlate" class="form-control"/>
