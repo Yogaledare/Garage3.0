@@ -3,7 +3,8 @@ using Garage3._0.Models;
 using Garage3._0.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding; // For ModelState
-using Microsoft.AspNetCore.Mvc.Rendering; // For View
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore; // For View
 
 
 namespace Garage3._0.Controllers;
@@ -16,8 +17,20 @@ public class MembersController : Controller {
     }
 
 
-    public IActionResult Index() {
-        return View();
+    public async Task<IActionResult> Index() {
+
+        var members = await _context.Members
+            .Include(m => m.VehicleList)
+            .ToListAsync();
+
+        var memberViewModels = members.Select(m => new MemberViewModel {
+            FirstName = m.Firstname,
+            Surname = m.Surname,
+            SocialSecurityNr = m.SocialSecurityNr.ToString(),
+            Vehicles = m.VehicleList.ToList()
+        });
+        
+        return View(memberViewModels);
     }
 
     // GET: Members/Create
