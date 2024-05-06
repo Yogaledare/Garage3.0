@@ -11,6 +11,7 @@ namespace Garage3._0.Models
         private int currentUsed = 0;
         private int limitedWidth = 10; //5x10
         private HashSet<int> currentUsedSpots = new HashSet<int>();
+        public Dictionary<int,Dictionary<string,int>> parkingMap = new Dictionary<int,Dictionary<string,int>>();
 
         public GarageManager(GarageDbContext context)
         {
@@ -20,18 +21,45 @@ namespace Garage3._0.Models
         }
         private void Init()
         {
-            if (_context.parkingPlaces.Count() >= 0)
+            //if (_context.parkingPlaces.Count() >= 0)
+            //{
+            //    foreach (var p in _context.parkingPlaces.Select(p => p.ParkingPlaceNr))
+            //    {
+            //        currentUsedSpots.Add(p);
+            //    }
+            //}
+            if(_context.ParkingEvents.Count() > 0)
             {
-                foreach (var p in _context.parkingPlaces.Select(p => p.ParkingPlaceNr))
-                {
-                    currentUsedSpots.Add(p);
-                }
-            }
-        }
+                var pEvents = _context.ParkingEvents.Include(p => p.ParkingPlaces);
+				foreach (var pe in pEvents)
+				{
+					var parkingMapKey = pe.ParkingPlaces.First().ParkingPlaceNr;
+
+					if (!parkingMap.ContainsKey(parkingMapKey))
+					{
+						parkingMap.Add(parkingMapKey, new Dictionary<string, int>());
+					}
+                    var vId = pe.VehicleID;
+                    var v = _context.Vehicles.Find(vId);
+
+                    if(v != null)
+                    {
+                        var vtId = v.VehicleTypeId;
+                        var vt = _context.VehicleTypes.FirstOrDefault(vt => vt.VehicleTypeId == vtId);
+                        parkingMap[parkingMapKey][vt!.VehicleTypeName] = vt.ParkingSpaceRequirement;
+                    }
+					
+
+					foreach (var p in pe.ParkingPlaces)
+					{
+						currentUsedSpots.Add(p.ParkingPlaceNr);
+					}
+				}
+
+			}
+		}
         public ParkingEvent? ParkVehicle(int id)
         {
-            //en 5x10 garage
-            //random place
             //check for vehicle type for place set up
             var vehicle = _context.Vehicles.Find(id);
             if (vehicle == null)
@@ -65,6 +93,10 @@ namespace Garage3._0.Models
                     parkingEvent.Vehicle = vehicle;
                     parkingEvent.ParkingPlaces = tempSpotsList;
                     parkingEvent.ArrivalTime = DateTime.Now;
+
+                    //Save info in Dictionary
+                    parkingMap.Add(availableSpots[0], new Dictionary<string, int>() { { vtype.VehicleTypeName, vtype.ParkingSpaceRequirement } });
+
 
                     //Add to database
                     _context.parkingPlaces.AddRange(tempSpotsList);
@@ -142,6 +174,15 @@ namespace Garage3._0.Models
             {
                 return null;
             }
+        }
+
+        public int GetTotalPlaces()
+        {
+            return TOTALPARKINGPLACE;
+        }
+        public int GetLimited()
+        {
+            return limitedWidth;
         }
     }
 }
