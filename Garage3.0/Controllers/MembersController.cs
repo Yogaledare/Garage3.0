@@ -1,6 +1,7 @@
 ﻿using Garage3._0.Data;
 using Garage3._0.Models;
 using Garage3._0.Models.ViewModels;
+using Garage3._0.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding; // For ModelState
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,25 +12,16 @@ namespace Garage3._0.Controllers;
 
 public class MembersController : Controller {
     private readonly GarageDbContext _context;
+    private readonly IMemberService _memberService;
 
-    public MembersController(GarageDbContext context) {
+    public MembersController(GarageDbContext context, IMemberService memberService) {
         _context = context;
+        _memberService = memberService;
     }
 
 
     public async Task<IActionResult> Index() {
-
-        var members = await _context.Members
-            .Include(m => m.VehicleList)
-            .ToListAsync();
-
-        var memberViewModels = members.Select(m => new MemberViewModel {
-            FirstName = m.Firstname,
-            Surname = m.Surname,
-            SocialSecurityNr = m.SocialSecurityNr.ToString(),
-            Vehicles = m.VehicleList.ToList()
-        });
-        
+        var memberViewModels = await _memberService.GetAllMemberViewModelsAsync(); 
         return View(memberViewModels);
     }
 
