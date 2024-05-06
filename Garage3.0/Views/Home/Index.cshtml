@@ -3,20 +3,26 @@
 	ViewData["Title"] = "Home Page";
 }
 
-<div>
-    <table class="table">
+<table class="table">
+    <thead>
         <tr>
             <th>Owner</th>
             <th>License Plate</th>
-            <th>Register</th>
-            <th>Unregister</th>
+            <th>Action</th>
         </tr>
+    </thead>
+    <tbody>
         @foreach (var member in Model)
         {
+            bool isFirstVehicle = true; 
             foreach (var vehicle in member.VehicleList)
             {
                 <tr>
-                    <td>@member.Firstname @member.Surname</td>
+                    @if (isFirstVehicle)
+                    {
+                        <td rowspan="@member.VehicleList.Count">@member.Firstname @member.Surname</td>
+                        isFirstVehicle = false; 
+                    }
                     <td>@vehicle.LicencePlate</td>
                     <td>
                         @if (vehicle.ParkingEvent == null)
@@ -26,9 +32,7 @@
                                 <button type="submit" class="btn btn-success">Login</button>
                             }
                         }
-                    </td>
-                    <td>
-                        @if (vehicle.ParkingEvent != null)
+                        else
                         {
                             using (Html.BeginForm("Logout", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
                             {
@@ -39,5 +43,7 @@
                 </tr>
             }
         }
-    </table>
-</div>
+    </tbody>
+</table>
+
+
