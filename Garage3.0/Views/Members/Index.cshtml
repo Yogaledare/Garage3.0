@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Garage3._0.Models.ViewModels.MemberViewModel>
 
 @{
     ViewBag.Title = "title";
@@ -6,3 +6,25 @@
 }
 
 <h2>members index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Surname</th>
+            <th>Social Security Number</th>
+            <th>Vehicle Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>@member.FirstName</td>
+                <td>@member.Surname</td>
+                <td>@member.SocialSecurityNr</td>
+                <td>@member.VehicleCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

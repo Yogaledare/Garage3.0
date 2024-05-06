@@ -1,23 +1,28 @@
 ﻿using Garage3._0.Data;
 using Garage3._0.Models;
 using Garage3._0.Models.ViewModels;
+using Garage3._0.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding; // For ModelState
-using Microsoft.AspNetCore.Mvc.Rendering; // For View
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore; // For View
 
 
 namespace Garage3._0.Controllers;
 
 public class MembersController : Controller {
     private readonly GarageDbContext _context;
+    private readonly IMemberService _memberService;
 
-    public MembersController(GarageDbContext context) {
+    public MembersController(GarageDbContext context, IMemberService memberService) {
         _context = context;
+        _memberService = memberService;
     }
 
 
-    public IActionResult Index() {
-        return View();
+    public async Task<IActionResult> Index() {
+        var memberViewModels = await _memberService.GetAllMemberViewModelsAsync(); 
+        return View(memberViewModels);
     }
 
     // GET: Members/Create
