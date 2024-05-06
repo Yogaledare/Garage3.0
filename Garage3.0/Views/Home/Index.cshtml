@@ -25,18 +25,18 @@
                     }
                     <td>@vehicle.LicencePlate</td>
                     <td>
-                        @if (vehicle.ParkingEvent == null)
+                        @if (vehicle.ParkingEventID == null)
                         {
                             using (Html.BeginForm("Login", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
                             {
-                                <button type="submit" class="btn btn-success">Login</button>
+                                <button type="submit" class="btn btn-success">Check In</button>
                             }
                         }
                         else
                         {
                             using (Html.BeginForm("Logout", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
                             {
-                                <button type="submit" class="btn btn-danger">Logout</button>
+                                <button type="submit" class="btn btn-danger">Check Out</button>
                             }
                         }
                     </td>

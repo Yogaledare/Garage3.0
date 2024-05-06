@@ -15,7 +15,7 @@ public class Vehicle {
     public VehicleType VehicleType { get; set; }
     public int MemberId { get; set; }
     public Member  Member { get; set; }
-    // public int? ParkingEventID { get; set; } //nullable?
-    public ParkingEvent? ParkingEvent { get; set; } //nullable
+    public int? ParkingEventID { get; set; } 
+    public ParkingEvent? ParkingEvent { get; set; } 
 }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage3._0.Migrations
 {
     [DbContext(typeof(GarageDbContext))]
-    [Migration("20240502105152_Init")]
+    [Migration("20240506090640_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Garage3._0.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-preview.3.24172.4")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -121,7 +121,7 @@ namespace Garage3._0.Migrations
                     b.Property<int>("NumWheels")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParkingEventID")
+                    b.Property<int?>("ParkingEventID")
                         .HasColumnType("int");
 
                     b.Property<int>("VehicleTypeId")
@@ -156,13 +156,32 @@ namespace Garage3._0.Migrations
                     b.ToTable("VehicleTypes");
                 });
 
+            modelBuilder.Entity("Garage3._0.Models.WheelConfiguration", b =>
+                {
+                    b.Property<int>("WheelConfigurationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WheelConfigurationId"));
+
+                    b.Property<int>("NumWheels")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WheelConfigurationId");
+
+                    b.HasIndex("VehicleTypeId");
+
+                    b.ToTable("WheelConfiguration");
+                });
+
             modelBuilder.Entity("Garage3._0.Models.ParkingEvent", b =>
                 {
                     b.HasOne("Garage3._0.Models.Vehicle", "Vehicle")
                         .WithOne("ParkingEvent")
-                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID");
 
                     b.Navigation("Vehicle");
                 });
@@ -197,6 +216,17 @@ namespace Garage3._0.Migrations
                     b.Navigation("VehicleType");
                 });
 
+            modelBuilder.Entity("Garage3._0.Models.WheelConfiguration", b =>
+                {
+                    b.HasOne("Garage3._0.Models.VehicleType", "VehicleType")
+                        .WithMany("WheelConfigurations")
+                        .HasForeignKey("VehicleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VehicleType");
+                });
+
             modelBuilder.Entity("Garage3._0.Models.Member", b =>
                 {
                     b.Navigation("VehicleList");
@@ -209,13 +239,14 @@ namespace Garage3._0.Migrations
 
             modelBuilder.Entity("Garage3._0.Models.Vehicle", b =>
                 {
-                    b.Navigation("ParkingEvent")
-                        .IsRequired();
+                    b.Navigation("ParkingEvent");
                 });
 
             modelBuilder.Entity("Garage3._0.Models.VehicleType", b =>
                 {
                     b.Navigation("Vehicles");
+
+                    b.Navigation("WheelConfigurations");
                 });
 #pragma warning restore 612, 618
         }

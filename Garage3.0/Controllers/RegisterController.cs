@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Garage3._0.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Garage3._0.Controllers
 {
 	public class RegisterController : Controller
 	{
-		public IActionResult Index()
+		private readonly GarageManager _manager;
+        public RegisterController(GarageManager manager)
+        {
+            _manager = manager;
+        }
+        public IActionResult Index()
 		{
 			return View();
 		}
@@ -12,7 +18,7 @@ namespace Garage3._0.Controllers
 		[HttpPost]
 		public ActionResult Login(int id)
 		{
-			Console.WriteLine(id);
+			var parkEvent = _manager.ParkVehicle(id);
 			return RedirectToAction("Index", "Home");
 		}
 
