@@ -34,13 +34,13 @@ namespace Garage3._0.Models
             //random place
             //check for vehicle type for place set up
             var vehicle = _context.Vehicles.Find(id);
-            if(vehicle == null)
+            if (vehicle == null)
             {
                 return null;
             }
             var vtId = vehicle.VehicleTypeId;
             var vtype = _context.VehicleTypes.Find(vtId);
-            if(vtype ==null)
+            if (vtype == null)
             {
                 return null;
             }
@@ -56,6 +56,7 @@ namespace Garage3._0.Models
                     foreach (var s in availableSpots)
                     {
                         var place = new ParkingPlace { ParkingPlaceNr = s };
+                        currentUsedSpots.Add(s);
                         place.ParkingEvent = parkingEvent;
                         place.ParkingEventID = parkingEvent.ParkingEventID;
                         tempSpotsList.Add(place);
@@ -64,11 +65,11 @@ namespace Garage3._0.Models
                     parkingEvent.Vehicle = vehicle;
                     parkingEvent.ParkingPlaces = tempSpotsList;
                     parkingEvent.ArrivalTime = DateTime.Now;
-                
+
                     //Add to database
                     _context.parkingPlaces.AddRange(tempSpotsList);
                     _context.ParkingEvents.AddRange(parkingEvent);
-                    
+
                     _context.SaveChanges();
                     //_context.Entry(vehicle).State = EntityState.Modified;
                     vehicle.ParkingEventID = parkingEvent.ParkingEventID;
@@ -82,22 +83,28 @@ namespace Garage3._0.Models
                 }
             }
             //search for empty place, check adjacent spot, see if it's empty or is side(out of range)
-     
+
         }
 
-        private List<int>? FindAvailableParingSpots(int placeTaken)
-        {
-            var tempList = new List<int>();
-            for (int i = 1; i <= TOTALPARKINGPLACE; i++)
+        public List<int>? FindAvailableParingSpots(int placeTaken)
+        {          
+            if (placeTaken == 1)
             {
-                if (!currentUsedSpots.Contains(i))
+                int randomPlace;
+                var tempList = new List<int>();
+                do
                 {
-                    if (placeTaken == 1)
-                    {
-                        tempList.Add(i);
-                        return tempList;  // Found the needed single spot and exit the loop
-                    }
-                    else
+                    randomPlace = random.Next(1, TOTALPARKINGPLACE + 1);
+                } while (currentUsedSpots.Contains(randomPlace));
+                tempList.Add(randomPlace);
+                return tempList;
+            }
+            else if (placeTaken > 1)
+            {
+                var tempMultiList = new List<List<int>>();
+                for (int i = 1; i <= TOTALPARKINGPLACE; i++)
+                {
+                    if (!currentUsedSpots.Contains(i))
                     {
                         bool spotFound = true;
                         for (int j = i + 1; j <= i + placeTaken - 1; j++)
@@ -116,18 +123,25 @@ namespace Garage3._0.Models
                         }
                         if (spotFound)
                         {
+                            //Find all possible places
+                            var temp = new List<int>();
                             for (int k = i; k < i + placeTaken; k++)
                             {
-                                tempList.Add(k);
+                                temp.Add(k);
                             }
-                            return tempList; // Found all the needed spots and exit the loop
+                            tempMultiList.Add(temp);
+                            i = i + placeTaken-1;
+                            //spotFound = false;
                         }
                     }
                 }
+                int randomList = random.Next(0, tempMultiList.Count);
+                return tempMultiList[randomList];
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
-
-
     }
 }
