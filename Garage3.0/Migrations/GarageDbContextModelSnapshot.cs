@@ -118,6 +118,9 @@ namespace Garage3._0.Migrations
                     b.Property<int>("NumWheels")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ParkingEventID")
+                        .HasColumnType("int");
+
                     b.Property<int>("VehicleTypeId")
                         .HasColumnType("int");
 

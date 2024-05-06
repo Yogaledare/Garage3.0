@@ -19,57 +19,64 @@ namespace Garage3._0.Models
         }
         private void Init()
         {
-            //make sure this Init only runs one time(Service Singleton)
-            //if (_context.parkingPlaces.Count() >= 0)
-            //{
-            //    foreach( var p in _context.parkingPlaces.Select(p => p.ParkingPlaceNr))
-            //    {
-            //        currentUsedSpots.Add(p);
-            //    }
-            //}
-            //Console.WriteLine("Initalizin!!!!!!!!!");
-            //currentUsedSpots.UnionWith(new int[] { 1, 4, 5, 7, 9 });
-            //string output = string.Join(", ", currentUsedSpots);
-            //Console.WriteLine("Current Used Spots " + output);
-
+            if (_context.parkingPlaces.Count() >= 0)
+            {
+                foreach (var p in _context.parkingPlaces.Select(p => p.ParkingPlaceNr))
+                {
+                    currentUsedSpots.Add(p);
+                }
+            }
         }
-        public ParkingEvent? ParkVehicle(Vehicle vehicle)
+        public ParkingEvent? ParkVehicle(int id)
         {
             //en 5x10 garage
             //random place
             //check for vehicle type for place set up
-            var placeTaken = vehicle.VehicleType.ParkingSpaceRequirement;
-            //search for empty place, check adjacent spot, see if it's empty or is side(out of range)
-            var availableSpots = FindAvailableParingSpots(placeTaken);
-            if (availableSpots != null)
-            {
-                string output = string.Join(", ", availableSpots);
-                Console.WriteLine("The Frist empty spot are " + output);
-                //actual implementation 
-                var tempSpotsList = new List<ParkingPlace>();
-                ParkingEvent parkingEvent = new ParkingEvent();
-                foreach (var s in availableSpots)
-                {
-                    var place = new ParkingPlace { ParkingPlaceNr = s };
-                    place.ParkingEvent = parkingEvent;
-                    place.ParkingEventID = parkingEvent.ParkingEventID;
-                    tempSpotsList.Add(place);
-                }
-                parkingEvent.VehicleID = vehicle.VehicleId;
-                parkingEvent.Vehicle = vehicle;
-                parkingEvent.ParkingPlaces = tempSpotsList;
-                parkingEvent.ArrivalTime = DateTime.Now;
-
-                //Add to database
-                //_context.parkingPlaces.AddRange(tempSpotsList);
-                //_context.ParkingEvents.AddRange(parkingEvent);
-                //_context.SaveChanges();
-                return parkingEvent;
-            }
-            else
+            var vehicle = _context.Vehicles.Find(id);
+            if(vehicle == null)
             {
                 return null;
             }
+            var vtId = vehicle.VehicleTypeId;
+            var vtype = _context.VehicleTypes.Find(vtId);
+            if(vtype ==null)
+            {
+                return null;
+            }
+            else
+            {
+                var placeTaken = vtype.ParkingSpaceRequirement;
+                var availableSpots = FindAvailableParingSpots(placeTaken);
+                if (availableSpots != null)
+                {
+                    //actual implementation 
+                    var tempSpotsList = new List<ParkingPlace>();
+                    ParkingEvent parkingEvent = new ParkingEvent();
+                    foreach (var s in availableSpots)
+                    {
+                        var place = new ParkingPlace { ParkingPlaceNr = s };
+                        place.ParkingEvent = parkingEvent;
+                        place.ParkingEventID = parkingEvent.ParkingEventID;
+                        tempSpotsList.Add(place);
+                    }
+                    parkingEvent.VehicleID = vehicle.VehicleId;
+                    parkingEvent.Vehicle = vehicle;
+                    parkingEvent.ParkingPlaces = tempSpotsList;
+                    parkingEvent.ArrivalTime = DateTime.Now;
+                    vehicle.ParkingEvent = parkingEvent ;
+                    //Add to database
+                    _context.parkingPlaces.AddRange(tempSpotsList);
+                    _context.ParkingEvents.AddRange(parkingEvent);
+                    _context.SaveChanges();
+                    return parkingEvent;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            //search for empty place, check adjacent spot, see if it's empty or is side(out of range)
+     
         }
 
         private List<int>? FindAvailableParingSpots(int placeTaken)
