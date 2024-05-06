@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage3._0.Migrations
 {
     [DbContext(typeof(GarageDbContext))]
-    [Migration("20240506075913_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240506090640_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,9 +181,7 @@ namespace Garage3._0.Migrations
                 {
                     b.HasOne("Garage3._0.Models.Vehicle", "Vehicle")
                         .WithOne("ParkingEvent")
-                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID");
 
                     b.Navigation("Vehicle");
                 });

@@ -25,7 +25,7 @@
                     }
                     <td>@vehicle.LicencePlate</td>
                     <td>
-                        @if (vehicle.ParkingEvent == null)
+                        @if (vehicle.ParkingEventID == null)
                         {
                             using (Html.BeginForm("Login", "Register", new { id = vehicle.VehicleId }, FormMethod.Post))
                             {

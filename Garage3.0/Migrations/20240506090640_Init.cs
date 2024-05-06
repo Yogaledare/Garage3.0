@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Garage3._0.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -109,8 +109,7 @@ namespace Garage3._0.Migrations
                         name: "FK_ParkingEvents_Vehicles_VehicleID",
                         column: x => x.VehicleID,
                         principalTable: "Vehicles",
-                        principalColumn: "VehicleId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "VehicleId");
                 });
 
             migrationBuilder.CreateTable(

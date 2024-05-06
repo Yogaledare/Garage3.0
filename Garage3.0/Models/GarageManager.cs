@@ -1,4 +1,5 @@
 ﻿using Garage3._0.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Models
 {
@@ -63,10 +64,15 @@ namespace Garage3._0.Models
                     parkingEvent.Vehicle = vehicle;
                     parkingEvent.ParkingPlaces = tempSpotsList;
                     parkingEvent.ArrivalTime = DateTime.Now;
-                    vehicle.ParkingEvent = parkingEvent ;
+                
                     //Add to database
                     _context.parkingPlaces.AddRange(tempSpotsList);
                     _context.ParkingEvents.AddRange(parkingEvent);
+                    
+                    _context.SaveChanges();
+                    //_context.Entry(vehicle).State = EntityState.Modified;
+                    vehicle.ParkingEventID = parkingEvent.ParkingEventID;
+                    vehicle.ParkingEvent = parkingEvent;
                     _context.SaveChanges();
                     return parkingEvent;
                 }

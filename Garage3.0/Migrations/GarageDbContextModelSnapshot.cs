@@ -178,9 +178,7 @@ namespace Garage3._0.Migrations
                 {
                     b.HasOne("Garage3._0.Models.Vehicle", "Vehicle")
                         .WithOne("ParkingEvent")
-                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Garage3._0.Models.ParkingEvent", "VehicleID");
 
                     b.Navigation("Vehicle");
                 });

@@ -3,28 +3,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Data;
 
-public class GarageDbContext : DbContext {
-    public GarageDbContext(DbContextOptions<GarageDbContext> options) : base(options) {
+public class GarageDbContext : DbContext
+{
+    public GarageDbContext(DbContextOptions<GarageDbContext> options) : base(options)
+    {
     }
 
     public DbSet<VehicleType> VehicleTypes { get; set; } = default!;
     public DbSet<Vehicle> Vehicles { get; set; } = default!;
-    public DbSet<Member> Members { get; set; }  
+    public DbSet<Member> Members { get; set; }
     public DbSet<ParkingEvent> ParkingEvents { get; set; }
     public DbSet<ParkingPlace> parkingPlaces { get; set; }
-    
-    
-    
+
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Vehicle>()
-            .HasOne(v => v.ParkingEvent)
-            .WithOne(p => p.Vehicle)
-            .HasForeignKey<ParkingEvent>(p => p.VehicleID)
-            .IsRequired(true)
-            ;
-        
+          .HasOne(v => v.ParkingEvent)
+          .WithOne(p => p.Vehicle)
+          .HasForeignKey<ParkingEvent>(p => p.VehicleID)
+           .IsRequired(false);
+
         // Seed data method calls
         //SeedVehicleTypes(modelBuilder);
         //SeedVehicles(modelBuilder);
@@ -47,6 +48,6 @@ public class GarageDbContext : DbContext {
             new Vehicle { VehicleId = 3, LicencePlate = "HHH777", Color = "Black", Brand = "Harley", Model = "Davidson", NumWheels = 2, VehicleTypeId = 2 }
         );
     }
-    
+
 }
 
