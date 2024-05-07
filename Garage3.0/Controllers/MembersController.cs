@@ -112,6 +112,27 @@ public class MembersController : Controller {
     [ValidateAntiForgeryToken]
     public IActionResult CreateVehicle(CreateVehicleViewModel input) {
         if (ModelState.IsValid) {
+
+            Console.WriteLine(input.LicencePlate);
+            Console.WriteLine(input.Color);
+            Console.WriteLine(input.Brand);
+            Console.WriteLine(input.Model);
+            Console.WriteLine(input.NumWheels);
+            Console.WriteLine(input.MemberId);
+            Console.WriteLine(input.VehicleTypeId);
+
+            var vehicle = new Vehicle {
+                LicencePlate = input.LicencePlate,
+                Color = input.Color,
+                Brand = input.Brand,
+                Model = input.Model,
+                NumWheels = input.NumWheels ?? 0,
+                VehicleTypeId = input.VehicleTypeId ?? 0,
+                MemberId = input.MemberId ?? 0, 
+            };
+
+            _context.Vehicles.Add(vehicle);
+            _context.SaveChanges(); 
             return RedirectToAction(nameof(Index));
         }
 
