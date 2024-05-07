@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<Garage3._0.Models.ViewModels.MemberViewModel>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Members Index";
     Layout = "_Layout";
 }
 
-<h2>members index</h2>
+<h2>Members Index</h2>
 
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr class="bg-secondary text-white">
+        @* <tr> *@
             <th>First Name</th>
             <th>Surname</th>
             <th>Social Security Number</th>
@@ -19,11 +20,18 @@
     <tbody>
         @foreach (var member in Model)
         {
-            <tr>
+            <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false">
                 <td>@member.FirstName</td>
                 <td>@member.Surname</td>
                 <td>@member.SocialSecurityNr</td>
                 <td>@member.VehicleCount</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="p-0">
+                    <div id="vehiclesForMember-@member.FirstName-@member.Surname" class="collapse">
+                        @await Html.PartialAsync("_VehicleList", member.Vehicles)
+                    </div>
+                </td>
             </tr>
         }
     </tbody>

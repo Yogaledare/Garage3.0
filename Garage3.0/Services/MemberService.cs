@@ -27,6 +27,7 @@ public class MemberService : IMemberService
         // Map members to view models
         return members.Select(m => new MemberViewModel
         {
+            MemberId = m.MemberId,
             FirstName = m.Firstname,
             Surname = m.Surname,
             SocialSecurityNr = m.SocialSecurityNr.ToString(),
@@ -42,6 +43,8 @@ public class MemberService : IMemberService
         
         return new VehicleViewModel
         {
+            VehicleId = vehicle.VehicleId, 
+            OwnerMemberId = member.MemberId,
             OwnerFirstName = member.Firstname,
             OwnerLastName = member.Surname,
             VehicleTypeName = vehicleTypeName,
