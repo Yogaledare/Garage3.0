@@ -8,10 +8,9 @@ namespace Garage3._0.Models
         private readonly GarageDbContext _context;
         private Random random;
         private const int TOTALPARKINGPLACE = 50;
-        private int currentUsed = 0;
         private int limitedWidth = 10; //5x10
         private HashSet<int> currentUsedSpots = new HashSet<int>();
-        public Dictionary<int,Dictionary<string,int>> parkingMap = new Dictionary<int,Dictionary<string,int>>();
+        public Dictionary<int, Dictionary<string, int>> parkingMap = new Dictionary<int, Dictionary<string, int>>();
 
         public GarageManager(GarageDbContext context)
         {
@@ -19,45 +18,35 @@ namespace Garage3._0.Models
             random = new Random();
             Init();
         }
-        private void Init()
+        public void Init()
         {
-            //if (_context.parkingPlaces.Count() >= 0)
-            //{
-            //    foreach (var p in _context.parkingPlaces.Select(p => p.ParkingPlaceNr))
-            //    {
-            //        currentUsedSpots.Add(p);
-            //    }
-            //}
-            if(_context.ParkingEvents.Count() > 0)
+            if (_context.ParkingEvents.Count() > 0)
             {
                 var pEvents = _context.ParkingEvents.Include(p => p.ParkingPlaces);
-				foreach (var pe in pEvents)
-				{
-					var parkingMapKey = pe.ParkingPlaces.First().ParkingPlaceNr;
+                foreach (var pe in pEvents)
+                {
+                    var parkingMapKey = pe.ParkingPlaces.First().ParkingPlaceNr;
 
-					if (!parkingMap.ContainsKey(parkingMapKey))
-					{
-						parkingMap.Add(parkingMapKey, new Dictionary<string, int>());
-					}
+                    if (!parkingMap.ContainsKey(parkingMapKey))
+                    {
+                        parkingMap.Add(parkingMapKey, new Dictionary<string, int>());
+                    }
                     var vId = pe.VehicleID;
                     var v = _context.Vehicles.Find(vId);
 
-                    if(v != null)
+                    if (v != null)
                     {
                         var vtId = v.VehicleTypeId;
                         var vt = _context.VehicleTypes.FirstOrDefault(vt => vt.VehicleTypeId == vtId);
                         parkingMap[parkingMapKey][vt!.VehicleTypeName] = vt.ParkingSpaceRequirement;
                     }
-					
-
-					foreach (var p in pe.ParkingPlaces)
-					{
-						currentUsedSpots.Add(p.ParkingPlaceNr);
-					}
-				}
-
-			}
-		}
+                    foreach (var p in pe.ParkingPlaces)
+                    {
+                        currentUsedSpots.Add(p.ParkingPlaceNr);
+                    }
+                }
+            }
+        }
         public ParkingEvent? ParkVehicle(int id)
         {
             //check for vehicle type for place set up
@@ -87,6 +76,7 @@ namespace Garage3._0.Models
                         currentUsedSpots.Add(s);
                         place.ParkingEvent = parkingEvent;
                         place.ParkingEventID = parkingEvent.ParkingEventID;
+                        //save used place in manger
                         tempSpotsList.Add(place);
                     }
                     parkingEvent.VehicleID = vehicle.VehicleId;
@@ -117,9 +107,36 @@ namespace Garage3._0.Models
             //search for empty place, check adjacent spot, see if it's empty or is side(out of range)
 
         }
+        public ParkingEvent? UnParkVehicle(int id)
+        {
+            //Since id has been check, so it won't be null here
+            var vehicle = _context.Vehicles.Find(id);
+            var parkingEvent = _context.ParkingEvents.Include(p=>p.ParkingPlaces).First(p => p.VehicleID == id);
+            var parkinglist = parkingEvent.ParkingPlaces.ToList();
+            if (vehicle != null && parkingEvent != null)
+            {
+                vehicle.ParkingEvent = null;
+                vehicle.ParkingEventID = null;
+                //try delete parkingevent and see if all parking spots is gone too, works
+                //remove things from manager
+                foreach(var p in parkinglist)
+                {
+                    currentUsedSpots.Remove(p.ParkingPlaceNr);
+                }
+                parkingMap.Remove(parkinglist.First().ParkingPlaceNr);
+                _context.ParkingEvents.Remove(parkingEvent);
+                _context.Vehicles.Update(vehicle);
+                _context.SaveChanges();
+                return parkingEvent;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public List<int>? FindAvailableParingSpots(int placeTaken)
-        {          
+        {
             if (placeTaken == 1)
             {
                 int randomPlace;
@@ -162,7 +179,7 @@ namespace Garage3._0.Models
                                 temp.Add(k);
                             }
                             tempMultiList.Add(temp);
-                            i = i + placeTaken-1;
+                            i = i + placeTaken - 1;
                             //spotFound = false;
                         }
                     }
@@ -183,6 +200,10 @@ namespace Garage3._0.Models
         public int GetLimited()
         {
             return limitedWidth;
+        }
+        public Dictionary<int,Dictionary<string,int>> GetMap()
+        {
+            return parkingMap;
         }
     }
 }
