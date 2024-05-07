@@ -9,7 +9,7 @@ namespace Garage3._0.Data
         private readonly GarageDbContext _context;
         private readonly Faker faker;
 
-        public SeedDataGenerator(GarageDbContext context )
+        public SeedDataGenerator(GarageDbContext context)
         {
             _context = context;
             faker = new Faker();

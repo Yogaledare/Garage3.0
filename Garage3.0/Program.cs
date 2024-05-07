@@ -22,7 +22,8 @@ builder.Services.AddDbContext<GarageDbContext>(options =>
 builder.Services.AddScoped<IGarageManager, GarageManager>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 //Add service for fake data
-//builder.Services.AddTransient<FakeDataGenerator>();
+builder.Services.AddTransient<SeedDataGenerator>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,5 +43,12 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Members}/{action=Index}/{id?}");
+
+//try dataseeding here
+using (var scope = app.Services.CreateScope())
+{
+    var seedDataGenerator = scope.ServiceProvider.GetRequiredService<SeedDataGenerator>();
+    seedDataGenerator.Generate();
+}
 app.Run();
