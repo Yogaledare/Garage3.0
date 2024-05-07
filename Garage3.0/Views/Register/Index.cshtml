@@ -1,6 +1,7 @@
 ﻿@model GarageManager
 @{
 	ViewData["Title"] = "Parking lot";
+
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <div class="container">
@@ -9,8 +10,7 @@
             int placesPerRow = Model.GetLimited();
             int totalPlaces = Model.GetTotalPlaces();
             int placeCounter = 0; 
-            int currentSpotIndex = 1; 
-
+            int currentSpotIndex = 1;
             while (currentSpotIndex <= totalPlaces)
             {
                 if (Model.parkingMap.TryGetValue(currentSpotIndex, out var innerMap))

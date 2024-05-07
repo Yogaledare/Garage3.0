@@ -43,9 +43,9 @@ namespace Garage3._0.Controllers
             //    return View(result);
             //}
             //data seeding!
-            //var seedData = new SeedDataGenerator(_context);
-            //seedData.Generate();
-          
+            var seedData = new SeedDataGenerator(_context);
+            seedData.Generate();
+
             var result = _context.Members.Include(m=>m.VehicleList);
             return View(result);
         }
