@@ -7,8 +7,8 @@ namespace Garage3._0.Controllers
 {
 	public class RegisterController : Controller
 	{
-		private readonly GarageManager _manager;
-        public RegisterController(GarageManager manager)
+		private readonly IGarageManager _manager;
+        public RegisterController(IGarageManager manager)
         {
             _manager = manager;
         }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Models
 {
-    public class GarageManager
+    public class GarageManager : IGarageManager
     {
         private readonly GarageDbContext _context;
         private Random random;
@@ -18,7 +18,7 @@ namespace Garage3._0.Models
             random = new Random();
             Init();
         }
-        public void Init()
+        private void Init()
         {
             if (_context.ParkingEvents.Count() > 0)
             {
@@ -111,7 +111,7 @@ namespace Garage3._0.Models
         {
             //Since id has been check, so it won't be null here
             var vehicle = _context.Vehicles.Find(id);
-            var parkingEvent = _context.ParkingEvents.Include(p=>p.ParkingPlaces).First(p => p.VehicleID == id);
+            var parkingEvent = _context.ParkingEvents.Include(p => p.ParkingPlaces).First(p => p.VehicleID == id);
             var parkinglist = parkingEvent.ParkingPlaces.ToList();
             if (vehicle != null && parkingEvent != null)
             {
@@ -119,7 +119,7 @@ namespace Garage3._0.Models
                 vehicle.ParkingEventID = null;
                 //try delete parkingevent and see if all parking spots is gone too, works
                 //remove things from manager
-                foreach(var p in parkinglist)
+                foreach (var p in parkinglist)
                 {
                     currentUsedSpots.Remove(p.ParkingPlaceNr);
                 }
@@ -135,7 +135,7 @@ namespace Garage3._0.Models
             }
         }
 
-        public List<int>? FindAvailableParingSpots(int placeTaken)
+        private List<int>? FindAvailableParingSpots(int placeTaken)
         {
             if (placeTaken == 1)
             {
@@ -200,10 +200,6 @@ namespace Garage3._0.Models
         public int GetLimited()
         {
             return limitedWidth;
-        }
-        public Dictionary<int,Dictionary<string,int>> GetMap()
-        {
-            return parkingMap;
         }
     }
 }
