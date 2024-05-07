@@ -15,7 +15,7 @@ namespace Garage3._0.Data
             faker = new Faker();
         }
 
-        public void Generate()
+        public void Generate(int count)
         {
             if (_context.Members.Any())
             {
@@ -91,7 +91,7 @@ namespace Garage3._0.Data
                     ]
                 }
             };
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < count; i++) {
                 var member = new Member {
                  
                     SocialSecurityNr = GenerateBirthdayCode(faker),

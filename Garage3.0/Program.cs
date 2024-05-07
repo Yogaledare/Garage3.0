@@ -49,6 +49,6 @@ app.MapControllerRoute(
 using (var scope = app.Services.CreateScope())
 {
     var seedDataGenerator = scope.ServiceProvider.GetRequiredService<SeedDataGenerator>();
-    seedDataGenerator.Generate();
+    seedDataGenerator.Generate(10);
 }
 app.Run();
