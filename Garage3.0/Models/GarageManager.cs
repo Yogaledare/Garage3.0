@@ -1,4 +1,5 @@
 ﻿using Garage3._0.Data;
+using Garage3._0.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Models
@@ -107,10 +108,10 @@ namespace Garage3._0.Models
             //search for empty place, check adjacent spot, see if it's empty or is side(out of range)
 
         }
-        public ParkingEvent? UnParkVehicle(int id)
+        public VehicleViewModel? UnParkVehicle(int id)
         {
             //Since id has been check, so it won't be null here
-            var vehicle = _context.Vehicles.Find(id);
+            var vehicle = _context.Vehicles.Include(v => v.Member).FirstOrDefault(v => v.VehicleId == id);
             var parkingEvent = _context.ParkingEvents.Include(p => p.ParkingPlaces).First(p => p.VehicleID == id);
             var parkinglist = parkingEvent.ParkingPlaces.ToList();
             if (vehicle != null && parkingEvent != null)
@@ -127,7 +128,15 @@ namespace Garage3._0.Models
                 _context.ParkingEvents.Remove(parkingEvent);
                 _context.Vehicles.Update(vehicle);
                 _context.SaveChanges();
-                return parkingEvent;
+                return new VehicleViewModel { 
+                    VehicleId = vehicle.VehicleId,
+                    OwnerMemberId = vehicle.MemberId,
+                    OwnerFirstName = vehicle.Member.Firstname,
+                    OwnerLastName = vehicle.Member.Surname,
+                    LicensePlate = vehicle.LicencePlate!,
+                    ParkingStartedDateTime = parkingEvent.ArrivalTime,
+                    ParkingEndedDateTime = DateTime.Now
+                };
             }
             else
             {
