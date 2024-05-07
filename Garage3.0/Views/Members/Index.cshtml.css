@@ -1,0 +1,4 @@
+/* Style when a row is expanded */
+[aria-expanded="true"] {
+    background-color: #d9e8fc; /* Example color for an expanded row */
+}
