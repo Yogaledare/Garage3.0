@@ -19,7 +19,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddDbContext<GarageDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GarageContext")));
 //Add service about garage manager
-
 builder.Services.AddScoped<IGarageManager, GarageManager>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 //Add service for fake data
