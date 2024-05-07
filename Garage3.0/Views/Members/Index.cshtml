@@ -5,6 +5,7 @@
     ViewBag.Title = "Members Index";
     Layout = "_Layout";
 }
+
 <h2>Members Index</h2>
 
 <table class="table table-bordered">
@@ -18,7 +19,7 @@
     </thead>
     <tbody>
     @foreach (var member in Model) {
-        <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false">
+        <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false" class="hoverable-row">
             <td>@member.Name</td>
             <td>@member.SocialSecurityNr</td>
             <td>@member.VehicleCount</td>

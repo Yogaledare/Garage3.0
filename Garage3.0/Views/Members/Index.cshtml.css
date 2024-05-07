@@ -1,4 +1,12 @@
-/* Style when a row is expanded */
-[aria-expanded="true"] {
-    background-color: #d9e8fc; /* Example color for an expanded row */
+.hoverable-row:hover {
+    background-color: #e8f5e9; /* A light green hover color */
 }
+
+tr[aria-expanded="true"] {
+    background-color: #d4edda !important;
+}
+
+tr[aria-expanded="false"] {
+    background-color: white;
+}
+

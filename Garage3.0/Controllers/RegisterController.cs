@@ -1,4 +1,5 @@
 ﻿using Garage3._0.Models;
+using Garage3._0.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -40,9 +41,8 @@ namespace Garage3._0.Controllers
         [HttpPost, ActionName("Logout")]
         public ActionResult DeleteConfirmed(int id)
 		{
-			var parkingEvent = _manager.UnParkVehicle(id);
-
-            return RedirectToAction("Index");
+			var model = _manager.UnParkVehicle(id);
+			return View("Invoice",model);
 		}
 
     }
