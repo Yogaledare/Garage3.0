@@ -9,30 +9,32 @@
 
 <table class="table table-bordered">
     <thead>
-        <tr class="bg-secondary text-white">
+    <tr class="bg-secondary text-white">
         @* <tr> *@
-            <th>First Name</th>
-            <th>Surname</th>
-            <th>Social Security Number</th>
-            <th>Vehicle Count</th>
-        </tr>
+        <th>Name</th>
+        <th>Social Security Number</th>
+        <th>Vehicle Count</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var member in Model)
-        {
-            <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false">
-                <td>@member.FirstName</td>
-                <td>@member.Surname</td>
-                <td>@member.SocialSecurityNr</td>
-                <td>@member.VehicleCount</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="p-0">
-                    <div id="vehiclesForMember-@member.FirstName-@member.Surname" class="collapse">
-                        @await Html.PartialAsync("_VehicleList", member.Vehicles)
+    @foreach (var member in Model) {
+        <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false">
+            <td>@member.Name</td>
+            <td>@member.SocialSecurityNr</td>
+            <td>@member.VehicleCount</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="p-0">
+                <div id="vehiclesForMember-@member.FirstName-@member.Surname" class="collapse">
+                    @await Html.PartialAsync("_VehicleList", member.Vehicles)
+
+                    <!-- Button for Registering a New Vehicle -->
+                    <div class="container text-center my-2 d-flex justify-content-end">
+                        <a href="@Url.Action("CreateVehicle", "Members", new {memberId = member.MemberId})" class="btn btn-primary">Register a New Vehicle</a>
                     </div>
-                </td>
-            </tr>
-        }
+                </div>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
