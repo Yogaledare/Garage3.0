@@ -10,9 +10,9 @@ namespace Garage3._0.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly GarageDbContext _context;
-        private readonly GarageManager _manager;
+        private readonly IGarageManager _manager;
 
-        public HomeController(ILogger<HomeController> logger, GarageDbContext context,GarageManager manager)
+        public HomeController(ILogger<HomeController> logger, GarageDbContext context,IGarageManager manager)
         {
             _logger = logger;
             _context = context;
@@ -43,9 +43,9 @@ namespace Garage3._0.Controllers
             //    return View(result);
             //}
             //data seeding!
-            //var seedData = new SeedDataGenerator(_context);
-            //seedData.Generate();
-          
+            var seedData = new SeedDataGenerator(_context);
+            seedData.Generate();
+
             var result = _context.Members.Include(m=>m.VehicleList);
             return View(result);
         }

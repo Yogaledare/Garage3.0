@@ -9,7 +9,7 @@
         <th>Parking Start Time</th>
         <th>Parking End Time</th>
         <th>Parked Time</th>
-        <th>Actions</th>
+        <th style="width: 200px;">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
             <td>@parkingStartDisplay</td>
             <td>@parkingEndDisplay</td>
             <td>@vehicle.ParkedTime.TotalHours.ToString("F2") hours</td>
-            <td>
+            <td class="d-flex justify-content-center">
                 @if (isParked) {
                     <form asp-action="Logout" asp-controller="Register" method="post">
                         <input type="hidden" name="id" value="@vehicle.VehicleId"/>
