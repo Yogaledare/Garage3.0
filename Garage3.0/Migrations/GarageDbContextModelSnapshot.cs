@@ -44,7 +44,7 @@ namespace Garage3._0.Migrations
 
                     b.HasKey("MemberId");
 
-                    b.ToTable("Members");
+                    b.ToTable("Members", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.Membership", b =>
@@ -72,7 +72,7 @@ namespace Garage3._0.Migrations
                     b.HasIndex("MemberID")
                         .IsUnique();
 
-                    b.ToTable("Memberships");
+                    b.ToTable("Memberships", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.ParkingEvent", b =>
@@ -97,7 +97,7 @@ namespace Garage3._0.Migrations
                     b.HasIndex("VehicleID")
                         .IsUnique();
 
-                    b.ToTable("ParkingEvents");
+                    b.ToTable("ParkingEvents", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.ParkingPlace", b =>
@@ -118,7 +118,7 @@ namespace Garage3._0.Migrations
 
                     b.HasIndex("ParkingEventID");
 
-                    b.ToTable("parkingPlaces");
+                    b.ToTable("parkingPlaces", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.Vehicle", b =>
@@ -159,7 +159,7 @@ namespace Garage3._0.Migrations
 
                     b.HasIndex("VehicleTypeId");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.VehicleType", b =>
@@ -179,7 +179,7 @@ namespace Garage3._0.Migrations
 
                     b.HasKey("VehicleTypeId");
 
-                    b.ToTable("VehicleTypes");
+                    b.ToTable("VehicleTypes", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.WheelConfiguration", b =>
@@ -200,7 +200,7 @@ namespace Garage3._0.Migrations
 
                     b.HasIndex("VehicleTypeId");
 
-                    b.ToTable("WheelConfiguration");
+                    b.ToTable("WheelConfiguration", (string)null);
                 });
 
             modelBuilder.Entity("Garage3._0.Models.Membership", b =>
