@@ -8,4 +8,5 @@ public class MemberViewModel {
     public string SocialSecurityNr { get; set; }
     public int VehicleCount => Vehicles.Count;
     public string Name => $"{FirstName} {Surname}"; 
+    public Membership.MembershipType MembershipType { get; set; }  
 }

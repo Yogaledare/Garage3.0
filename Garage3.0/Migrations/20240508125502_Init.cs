@@ -17,7 +17,7 @@ namespace Garage3._0.Migrations
                 {
                     MemberId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SocialSecurityNr = table.Column<int>(type: "int", nullable: false),
+                    SocialSecurityNr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -38,6 +38,28 @@ namespace Garage3._0.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VehicleTypes", x => x.VehicleTypeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Memberships",
+                columns: table => new
+                {
+                    MembershipId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MemberID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Memberships", x => x.MembershipId);
+                    table.ForeignKey(
+                        name: "FK_Memberships_Members_MemberID",
+                        column: x => x.MemberID,
+                        principalTable: "Members",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +122,7 @@ namespace Garage3._0.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VehicleID = table.Column<int>(type: "int", nullable: false),
                     ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -133,6 +155,12 @@ namespace Garage3._0.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Memberships_MemberID",
+                table: "Memberships",
+                column: "MemberID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParkingEvents_VehicleID",
                 table: "ParkingEvents",
                 column: "VehicleID",
@@ -162,6 +190,9 @@ namespace Garage3._0.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Memberships");
+
             migrationBuilder.DropTable(
                 name: "parkingPlaces");
 
