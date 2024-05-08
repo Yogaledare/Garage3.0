@@ -55,7 +55,7 @@ public class MembersController : Controller {
 
             var member = new Member
             {
-                SocialSecurityNr = (int)input.SocialSecurityNr,
+                SocialSecurityNr = input.SocialSecurityNr,
                 Firstname = input.Firstname,
                 Surname = input.Surname,
                 //VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition

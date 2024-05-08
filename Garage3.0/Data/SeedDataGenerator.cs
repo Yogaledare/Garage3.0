@@ -120,12 +120,14 @@ namespace Garage3._0.Data
             _context.SaveChanges();
         }
 
-        private int GenerateBirthdayCode(Faker faker)
+        private string GenerateBirthdayCode(Faker faker)
         {
             int year = faker.Date.Between(new DateTime(1950, 1, 1), new DateTime(2000, 12, 31)).Year;
             int month = faker.Random.Int(1, 12);
             int day = faker.Date.Between(new DateTime(year, month, 1), new DateTime(year, month, DateTime.DaysInMonth(year, month))).Day;
-            var birthdayCode = int.Parse($"{year}{month:00}{day:00}");
+            int randomFourDigits = faker.Random.Int(1000, 9999);
+            var birthdayCode = $"{year}{month:00}{day:00}{randomFourDigits}";
+
             return birthdayCode;
         }
     }

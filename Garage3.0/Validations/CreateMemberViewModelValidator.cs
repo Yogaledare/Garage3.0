@@ -19,7 +19,7 @@ public class CreateMemberViewModelValidator : AbstractValidator<CreateMemberView
         const string nameRegex = @"^[a-zA-Z\-\'\s]+$";
         //const string ssnRegex = @"^\d{8}$";
         //const int ssnLength = 8;
-        const string ssnRegex = @"^(19\d{2}|20(?:0[0-5]))(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$";
+        const string ssnRegex = @"^(19\d{2}|20(?:0[0-5]))(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{4}$";
 
         RuleFor(x => x.Firstname)
             .NotEmpty()
@@ -42,8 +42,8 @@ public class CreateMemberViewModelValidator : AbstractValidator<CreateMemberView
         RuleFor(x => x.SocialSecurityNr)
              .NotEmpty()
              .WithMessage("Social security number is required.")
-             .Must(ssn => Regex.IsMatch(ssn.ToString(), ssnRegex))
-             .WithMessage("Invalid Social Security Number. Format 19YYMMDD.");
+             .Matches(ssnRegex)
+             .WithMessage("Invalid Social Security Number. Format 19YYMMDD1234.");
         //.MustAsync(async (ssn, cancellationToken) =>
         //{
 

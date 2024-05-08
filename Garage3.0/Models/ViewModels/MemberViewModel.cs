@@ -5,7 +5,7 @@ public class MemberViewModel {
     public string FirstName { get; set;  }
     public string Surname { get; set; }
     public List<VehicleViewModel> Vehicles { get; set; }
-    public int SocialSecurityNr { get; set; }
+    public string SocialSecurityNr { get; set; }
     public int VehicleCount => Vehicles.Count;
     public string Name => $"{FirstName} {Surname}"; 
 }
