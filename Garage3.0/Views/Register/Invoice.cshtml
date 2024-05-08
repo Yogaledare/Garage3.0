@@ -24,7 +24,9 @@
                     <li class="list-group-item">Entered Time: @Model.ParkingStartedDateTime</li>
                     <li class="list-group-item">Ended Time: @Model.ParkingEndedDateTime</li>
                     <li class="list-group-item">Duration: @Model.ParkedTime.TotalHours.ToString("F2") hours</li>
-                    <li class="list-group-item">Parking Fee:Price 66 kr</li>
+                    <li class="list-group-item">
+                        Parking Fee:Price: @((Model.ParkedTime.TotalHours * 15).ToString("F2")) kr
+                    </li>
                 </ul>
             </div>
             <hr />

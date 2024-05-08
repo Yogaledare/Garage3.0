@@ -35,16 +35,33 @@ public class MembersController : Controller {
     [ValidateAntiForgeryToken]
     public IActionResult CreateMember(CreateMemberViewModel input) {
         if (ModelState.IsValid) {
-            // var member = new Member
-            // {
-            //     SocialSecurityNr = model.SocialSecurityNr,
-            //     Firstname = model.Firstname,
-            //     Surname = model.Surname,
-            //     VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition
-            // };
+            var existingMember = _context.Members.FirstOrDefault(x => x.SocialSecurityNr == input.SocialSecurityNr);
+            if (existingMember != null)
+            {
+                ModelState.AddModelError(nameof(CreateMemberViewModel.SocialSecurityNr), "Social Security Number already exists.");
+                return View(input);
+            }
 
-            // _context.Members.Add(member);
-            // _context.SaveChanges();
+            var fullName = input.Firstname + " " + input.Surname;
+            var memberWithFullName = _context.Members.FirstOrDefault(x => (x.Firstname + " " + x.Surname) == fullName);
+            if (memberWithFullName != null)
+            {
+                ModelState.AddModelError("", "A user with the same full name already exists.");
+                return View(input);
+            }
+
+
+
+            var member = new Member
+            {
+                SocialSecurityNr = input.SocialSecurityNr,
+                Firstname = input.Firstname,
+                Surname = input.Surname,
+                //VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition
+            };
+
+            _context.Members.Add(member);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index)); // Redirect to the index or another appropriate view
         }
 
