@@ -41,7 +41,7 @@ public class MemberService : IMemberService {
 
         var members = await membersQuery.ToListAsync();
         // Map members to view models
-        var output = members.Select(m => new MemberViewModel {
+        var memberViewModels = members.Select(m => new MemberViewModel {
                 MemberId = m.MemberId,
                 FirstName = m.Firstname,
                 Surname = m.Surname,
@@ -50,7 +50,11 @@ public class MemberService : IMemberService {
             })
             .ToList();
 
-        return output; 
+        memberViewModels = memberViewModels
+            .OrderBy(m => m.FirstName.Length >= 2 ? m.FirstName[..2] : m.FirstName)
+            .ToList(); 
+
+        return memberViewModels; 
     }
 
     public VehicleViewModel CreateVehicleViewModel(Vehicle vehicle, Member member) {
