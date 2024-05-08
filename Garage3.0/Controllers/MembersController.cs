@@ -88,8 +88,22 @@ public class MembersController : Controller {
     public IActionResult CreateVehicleType(CreateVehicleTypeViewModel model) {
 
         if (ModelState.IsValid) {
+            var vehicleType = new VehicleType {
+                VehicleTypeName = model.VehicleTypeName,
+                ParkingSpaceRequirement = model.ParkingSpaceRequirement
+            };
 
-            Console.WriteLine("hello!");
+            // Add wheel configurations
+            foreach (var wheels in model.AllowedWheelNumbers) {
+                vehicleType.WheelConfigurations.Add(new WheelConfiguration {
+                    NumWheels = wheels
+                });
+            }
+
+            // Save the new vehicle type and configurations
+            _context.VehicleTypes.Add(vehicleType);
+            _context.SaveChanges();
+
             return RedirectToAction("CreateVehicle", "Members", new { memberId = model.MemberId });
         }
 
@@ -102,12 +116,8 @@ public class MembersController : Controller {
     // GET: Members/5/RegisterVehicle
     [HttpGet("Members/{memberId:int}/CreateVehicle")]
     public IActionResult CreateVehicle(int memberId) {
-        var vehicleTypes = _context.VehicleTypes
-            .Select(vt => new SelectListItem {
-                Text = vt.VehicleTypeName,
-                Value = vt.VehicleTypeId.ToString()
-            })
-            .ToList(); 
+        Console.WriteLine("hello mum!");
+        var vehicleTypes = GetVehicleTypeOptions();
 
         var model = new CreateVehicleViewModel {
             MemberId = memberId, 
@@ -151,10 +161,22 @@ public class MembersController : Controller {
             _context.SaveChanges(); 
             return RedirectToAction(nameof(Index));
         }
-
+        
+        input.VehicleTypeOptions = GetVehicleTypeOptions();
         Console.WriteLine("inside create vehicle model state invalid");
         return View(input);
     }
+    
+    private List<SelectListItem> GetVehicleTypeOptions() {
+        // This method retrieves the vehicle type options to be used in both the GET and POST methods
+        return _context.VehicleTypes
+            .Select(vt => new SelectListItem {
+                Text = vt.VehicleTypeName,
+                Value = vt.VehicleTypeId.ToString()
+            })
+            .ToList();
+    }
+    
 }
 
 

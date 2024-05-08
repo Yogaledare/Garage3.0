@@ -21,6 +21,7 @@ builder.Services.AddDbContext<GarageDbContext>(options =>
 //Add service about garage manager
 builder.Services.AddScoped<IGarageManager, GarageManager>();
 builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 //Add service for fake data
 builder.Services.AddTransient<SeedDataGenerator>();
 

@@ -18,5 +18,7 @@
                 return new DateTime(year, month, day); 
             }
         }
+        
+        public string Name => $"{Firstname} {Surname}"; 
     }
 }
