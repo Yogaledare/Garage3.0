@@ -92,14 +92,27 @@ namespace Garage3._0.Data
                 }
             };
             for (int i = 0; i < count; i++) {
+                var ssr = GenerateBirthdayCode(faker);
                 var member = new Member {
                  
-                    SocialSecurityNr = GenerateBirthdayCode(faker),
+                    SocialSecurityNr = ssr,
                     Firstname = faker.Name.FirstName(),
                     Surname = faker.Name.LastName(),
                     VehicleList = new List<Vehicle>()
                 };
                 _context.Members.Add(member);
+                //generate start and end date using bogus
+                DateTime startDate = faker.Date.Between(DateTime.Now.AddDays(-40), DateTime.Now);
+                DateTime endDate = CalculateAge(ssr) < 65 ? startDate.AddDays(30) : startDate.AddYears(2);
+                var membership = new Membership
+                {
+                    Type = Membership.MembershipType.Premium,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Member = member //will database set the id?
+                };
+                _context.Memberships.Add(membership);
+                member.Membership = membership;
                 for(int j =0; j <faker.Random.Int(1,5); j++)
                 {
                     var vehicle = new Vehicle
@@ -128,6 +141,22 @@ namespace Garage3._0.Data
             int randomFourDigits = faker.Random.Int(1000, 9999);
             var birthdayCode = $"{year}{month:00}{day:00}{randomFourDigits}";
             return birthdayCode;
+        }
+
+        private int CalculateAge(string code)
+        {
+            //ugly code lol
+            if (code == null || code.Length < 4)
+            {
+                throw new ArgumentException("Invalid code: Code must contain at least four characters.");
+            }
+            int birthYear;
+            if (!int.TryParse(code.Substring(0, 4), out birthYear))
+            {
+                throw new ArgumentException("Invalid year in code: The first four characters must be a valid year.");
+            }
+            int currentYear = DateTime.Today.Year;
+            return currentYear - birthYear;
         }
     }
 }

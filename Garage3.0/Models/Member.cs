@@ -7,6 +7,7 @@
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public ICollection<Vehicle> VehicleList { get; set; } = [];
+        public Membership Membership { get; set; }
 
         public DateTime BirthDate {
             get {

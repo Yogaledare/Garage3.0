@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage3._0.Migrations
 {
     [DbContext(typeof(GarageDbContext))]
-    [Migration("20240508094936_second")]
-    partial class second
+    [Migration("20240508125502_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,34 @@ namespace Garage3._0.Migrations
                     b.HasKey("MemberId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("Garage3._0.Models.Membership", b =>
+                {
+                    b.Property<int>("MembershipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MembershipId"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("MembershipId");
+
+                    b.HasIndex("MemberID")
+                        .IsUnique();
+
+                    b.ToTable("Memberships");
                 });
 
             modelBuilder.Entity("Garage3._0.Models.ParkingEvent", b =>
@@ -178,6 +206,17 @@ namespace Garage3._0.Migrations
                     b.ToTable("WheelConfiguration");
                 });
 
+            modelBuilder.Entity("Garage3._0.Models.Membership", b =>
+                {
+                    b.HasOne("Garage3._0.Models.Member", "Member")
+                        .WithOne("Membership")
+                        .HasForeignKey("Garage3._0.Models.Membership", "MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Garage3._0.Models.ParkingEvent", b =>
                 {
                     b.HasOne("Garage3._0.Models.Vehicle", "Vehicle")
@@ -230,6 +269,9 @@ namespace Garage3._0.Migrations
 
             modelBuilder.Entity("Garage3._0.Models.Member", b =>
                 {
+                    b.Navigation("Membership")
+                        .IsRequired();
+
                     b.Navigation("VehicleList");
                 });
 

@@ -6,5 +6,7 @@ namespace Garage3._0.Services;
 public interface IMemberService {
     Task<List<MemberViewModel>> GetMemberViewModelsAsync(string? searchQuery);
     VehicleViewModel CreateVehicleViewModel(Vehicle vehicle, Member member);
-    Task<MembersIndexViewModel> GetMembersIndexViewModelAsync(string? searchQuery); 
+    Task<MembersIndexViewModel> GetMembersIndexViewModelAsync(string? searchQuery);
+
+    void RegisterMember(Member member);
 }

@@ -14,7 +14,7 @@ public class GarageDbContext : DbContext
     public DbSet<Member> Members { get; set; }
     public DbSet<ParkingEvent> ParkingEvents { get; set; }
     public DbSet<ParkingPlace> parkingPlaces { get; set; }
-
+    public DbSet<Membership> Memberships { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
