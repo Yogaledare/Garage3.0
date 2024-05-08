@@ -29,6 +29,8 @@
         <tr class="bg-secondary text-white">
             @* <tr> *@
             <th>Name</th>
+            <th>Membership</th>
+            <th>Member Since</th>
             <th>Social Security Number</th>
             <th>Vehicle Count</th>
         </tr>
@@ -37,6 +39,8 @@
         @foreach (var member in Model.Members) {
             <tr data-bs-toggle="collapse" data-bs-target="#vehiclesForMember-@member.FirstName-@member.Surname" aria-expanded="false" class="hoverable-row">
                 <td>@member.Name</td>
+                <td>@member.MembershipType</td>
+                <td>@member.StartDate</td>
                 <td>@member.SocialSecurityNr</td>
                 <td>@member.VehicleCount</td>
             </tr>

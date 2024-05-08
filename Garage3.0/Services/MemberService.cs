@@ -37,6 +37,7 @@ public class MemberService : IMemberService
             .ThenInclude(v => v.VehicleType)
             .Include(m => m.VehicleList)
             .ThenInclude(v => v.ParkingEvent)
+            .Include(m=>m.Membership)
             .AsQueryable();
 
 
@@ -54,6 +55,7 @@ public class MemberService : IMemberService
             Surname = m.Surname,
             SocialSecurityNr = m.SocialSecurityNr.ToString(),
             MembershipType = GetAndUpdateMembershipType(m.MemberId),
+            StartDate = m.Membership.StartDate,
             Vehicles = m.VehicleList.Select(v => CreateVehicleViewModel(v, m)).ToList()
         })
             .ToList();
@@ -94,8 +96,16 @@ public class MemberService : IMemberService
             MemberID = member.MemberId,
             Member = member
         };
-        //logic here, 30 days for all member, 2 years for 65+
-        membership.SetDuration();
+        int age = DateTime.Today.Year - member.BirthDate.Year;
+        //30 days for all member, 2 years for 65+
+        if (age >= 65)
+        {
+            membership.SetYearsDuration(2);
+        }
+        else
+        {
+            membership.SetDuration(30);
+        }       
         member.Membership = membership;
         _context.Members.Add(member);
         _context.Memberships.Add(membership);

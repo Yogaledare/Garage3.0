@@ -60,8 +60,7 @@ public class MembersController : Controller {
                 //VehicleList = new List<Vehicle>() // Initialize empty or handle vehicle addition
             };
 
-            _context.Members.Add(member);
-            _context.SaveChanges();
+            _memberService.RegisterMember(member);
             return RedirectToAction(nameof(Index)); // Redirect to the index or another appropriate view
         }
 

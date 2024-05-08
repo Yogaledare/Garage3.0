@@ -9,4 +9,5 @@ public class MemberViewModel {
     public int VehicleCount => Vehicles.Count;
     public string Name => $"{FirstName} {Surname}"; 
     public Membership.MembershipType MembershipType { get; set; }  
+    public DateTime StartDate { get; set; }
 }
