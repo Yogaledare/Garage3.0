@@ -20,9 +20,9 @@ public class MembersController : Controller {
     }
 
 
-    public async Task<IActionResult> Index() {
-        var memberViewModels = await _memberService.GetAllMemberViewModelsAsync(); 
-        return View(memberViewModels);
+    public async Task<IActionResult> Index(string? searchQuery = null) {
+        var model = await _memberService.GetMembersIndexViewModelAsync(searchQuery); 
+        return View(model);
     }
 
     // GET: Members/Create
