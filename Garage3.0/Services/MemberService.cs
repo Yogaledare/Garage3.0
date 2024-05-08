@@ -30,7 +30,7 @@ public class MemberService : IMemberService
             MemberId = m.MemberId,
             FirstName = m.Firstname,
             Surname = m.Surname,
-            SocialSecurityNr = m.SocialSecurityNr.ToString(),
+            SocialSecurityNr = m.SocialSecurityNr,
             Vehicles = m.VehicleList.Select(v => CreateVehicleViewModel(v, m)).ToList()
         }).ToList();
     }
