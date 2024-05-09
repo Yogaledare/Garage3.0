@@ -1,65 +1,48 @@
 ﻿@model Garage3._0.Models.ViewModels.VehiclesIndexViewModel
 
-<h2>Parked Vehicles Overview</h2>
 
-<!-- Search Form -->
+@{
+    var searchFormModel = new Garage3._0.Models.ViewModels.SearchFormViewModel {
+        SearchQuery = Model.SearchQuery,
+        FormAction = "Index",
+        FormController = "Vehicles",
+        PlaceholderText = "Search vehicle type, license plate or both"
+    };
+}
 
+<div class="container">
+    <h2>Parked Vehicles Overview</h2>
 
-<row class="d-flex justify-content-end">
-    <div class="col-4">
-        <!-- Search Form -->
-        <form asp-action="Index" method="get">
-            <div class="input-group mb-3">
-                <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control" placeholder="Search vehicle type, license plate or both"/>
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </form>
-    </div>
-</row>
+    @await Html.PartialAsync("_SearchForm", searchFormModel)
 
-
-<table class="table table-sm table-bordered mb-0">
-    <thead>
-    <tr class="bg-secondary text-white">
-        <th>Owner</th> <!-- Ägare -->
-        <th>Membership Type</th> <!-- Medlemskap -->
-        <th>Vehicle Type</th> <!-- Fordonstyp -->
-        <th>License Plate</th> <!-- RegNum -->
-        <th>Parked Time</th> <!-- ParkTid -->
-        <th style="width: 200px;">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var vehicle in Model.Vehicles) {
-        // Determine the display format for parking start and end times
-        var parkingStartDisplay = vehicle.ParkingStartedDateTime.HasValue
-            ? vehicle.ParkingStartedDateTime.Value.ToString("yyyy-MM-dd HH:mm")
-            : "N/A";
-
-        // Determine whether the vehicle is currently parked
-        var isParked = vehicle.ParkingStartedDateTime.HasValue && !vehicle.ParkingEndedDateTime.HasValue;
-
-        <tr class="bg-light">
-            <td>@vehicle.OwnerName</td> <!-- Ägare -->
-            <td>@vehicle.MembershipType</td> <!-- Medlemskap -->
-            <td>@vehicle.VehicleTypeName</td> <!-- Fordonstyp -->
-            <td>@vehicle.LicensePlate</td> <!-- RegNum -->
-            <td>@vehicle.ParkedTime.TotalHours.ToString("F2") hours</td>
-            <td class="d-flex justify-content-center">
-                @if (isParked) {
-                    <form asp-action="Logout" asp-controller="Register" method="post">
-                        <input type="hidden" name="id" value="@vehicle.VehicleId"/>
-                        <button type="submit" class="btn btn-danger">Unpark</button>
-                    </form>
-                }
-                else {
-                    <form asp-action="Login" asp-controller="Register" method="post">
-                        <input type="hidden" name="id" value="@vehicle.VehicleId"/>
-                        <button type="submit" class="btn btn-success">Park</button>
-                    </form>
-                }
-            </td>
+    <table class="table table-sm table-bordered mb-0">
+        <thead>
+        <tr class="bg-secondary text-white">
+            <th>Owner</th>
+            <th>Membership Type</th>
+            <th>Vehicle Type</th>
+            <th>License Plate</th>
+            <th>Parking Start Time</th>
+            <th>Parking End Time</th>
+            <th>Parked Time</th>
+            <th style="width: 200px;">Actions</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var vehicle in Model.Vehicles) {
+            <tr class="bg-light">
+                <td>@vehicle.OwnerName</td>
+                <td>@vehicle.MembershipType</td>
+                <td>@vehicle.VehicleTypeName</td>
+                <td>@vehicle.LicensePlate</td>
+                <td>@vehicle.ParkingStartDisplay</td>
+                <td>@vehicle.ParkingEndDisplay</td>
+                <td>@vehicle.ParkedTime.TotalHours.ToString("F2") hours</td>
+                @await Html.PartialAsync("_ParkingButton", vehicle)
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,12 @@
+﻿@model Garage3._0.Models.ViewModels.SearchFormViewModel
+
+<row class="d-flex justify-content-end">
+    <div class="col-4">
+        <form asp-action="@Model.FormAction" asp-controller="@Model.FormController" method="get">
+            <div class="input-group mb-3">
+                <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control" placeholder="@Model.PlaceholderText" />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+</row>

@@ -3,7 +3,6 @@
 <table class="table table-sm table-bordered mb-0">
     <thead>
     <tr class="bg-secondary text-white">
-    @* <tr> *@
         <th>License Plate</th>
         <th>Vehicle Type</th>
         <th>Parking Start Time</th>
@@ -14,37 +13,13 @@
     </thead>
     <tbody>
     @foreach (var vehicle in Model) {
-        var parkingStartDisplay = vehicle.ParkingStartedDateTime.HasValue
-            ? vehicle.ParkingStartedDateTime.Value.ToString("yyyy-MM-dd HH:mm")
-            : "N/A";
-        var parkingEndDisplay = vehicle.ParkingEndedDateTime.HasValue
-            ? vehicle.ParkingEndedDateTime.Value.ToString("yyyy-MM-dd HH:mm")
-            : "N/A";
-
-        // Determine whether the vehicle is currently parked
-        var isParked = vehicle.ParkingStartedDateTime.HasValue && !vehicle.ParkingEndedDateTime.HasValue;
-
         <tr class="bg-light">
-        @* <tr> *@
             <td>@vehicle.LicensePlate</td>
             <td>@vehicle.VehicleTypeName</td>
-            <td>@parkingStartDisplay</td>
-            <td>@parkingEndDisplay</td>
+            <td>@vehicle.ParkingStartDisplay</td>
+            <td>@vehicle.ParkingEndDisplay</td>
             <td>@vehicle.ParkedTime.TotalHours.ToString("F2") hours</td>
-            <td class="d-flex justify-content-center">
-                @if (isParked) {
-                    <form asp-action="Logout" asp-controller="Register" method="post">
-                        <input type="hidden" name="id" value="@vehicle.VehicleId"/>
-                        <button type="submit" class="btn btn-danger">Unpark</button>
-                    </form>
-                }
-                else {
-                    <form asp-action="Login" asp-controller="Register" method="post">
-                        <input type="hidden" name="id" value="@vehicle.VehicleId"/>
-                        <button type="submit" class="btn btn-success">Park</button>
-                    </form>
-                }
-            </td>
+            @await Html.PartialAsync("_ParkingButton", vehicle)
         </tr>
     }
     </tbody>

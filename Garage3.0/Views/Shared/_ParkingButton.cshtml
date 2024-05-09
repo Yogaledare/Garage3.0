@@ -1,0 +1,18 @@
+﻿@model Garage3._0.Models.ViewModels.VehicleViewModel
+
+<td class="d-flex justify-content-center">
+    @if (Model.IsParked)
+    {
+        <form asp-action="Logout" asp-controller="Register" method="post">
+            <input type="hidden" name="id" value="@Model.VehicleId" />
+            <button type="submit" class="btn btn-danger">Unpark</button>
+        </form>
+    }
+    else
+    {
+        <form asp-action="Login" asp-controller="Register" method="post">
+            <input type="hidden" name="id" value="@Model.VehicleId" />
+            <button type="submit" class="btn btn-success">Park</button>
+        </form>
+    }
+</td>
