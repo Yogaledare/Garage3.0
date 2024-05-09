@@ -1,6 +1,7 @@
 ﻿using Garage3._0.Data;
 using Garage3._0.Models;
 using Garage3._0.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Services;
@@ -69,5 +70,58 @@ public class VehicleService : IVehicleService {
 
         return model;
     }
+    
+    public void CreateVehicle(CreateVehicleViewModel input) {
+        Console.WriteLine(input.LicencePlate);
+        Console.WriteLine(input.Color);
+        Console.WriteLine(input.Brand);
+        Console.WriteLine(input.Model);
+        Console.WriteLine(input.NumWheels);
+        Console.WriteLine(input.MemberId);
+        Console.WriteLine(input.VehicleTypeId);
+
+        var vehicle = new Vehicle {
+            LicencePlate = input.LicencePlate,
+            Color = input.Color,
+            Brand = input.Brand,
+            Model = input.Model,
+            NumWheels = input.NumWheels ?? 0,
+            VehicleTypeId = input.VehicleTypeId ?? 0,
+            MemberId = input.MemberId ?? 0,
+        };
+
+        _context.Vehicles.Add(vehicle);
+        _context.SaveChanges();
+    }
+    
+    public List<SelectListItem> GetVehicleTypeOptions() {
+        return _context.VehicleTypes
+            .Select(vt => new SelectListItem {
+                Text = vt.VehicleTypeName,
+                Value = vt.VehicleTypeId.ToString()
+            })
+            .ToList();
+    }
+    
+    
+    public void CreateVehicleType(CreateVehicleTypeViewModel model) {
+        var vehicleType = new VehicleType {
+            VehicleTypeName = model.VehicleTypeName,
+            ParkingSpaceRequirement = model.ParkingSpaceRequirement
+        };
+
+        foreach (var wheels in model.AllowedWheelNumbers) {
+            vehicleType.WheelConfigurations.Add(new WheelConfiguration {
+                NumWheels = wheels
+            });
+        }
+
+        _context.VehicleTypes.Add(vehicleType);
+        _context.SaveChanges();
+    }
+    
+    
+    
+    
 }
 
