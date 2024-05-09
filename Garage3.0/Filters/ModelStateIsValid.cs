@@ -15,20 +15,3 @@ public class ModelStateIsValid : ActionFilterAttribute {
         };
     }
 }
-
-
-// ViewName = context.ActionDescriptor.DisplayName, // Or provide the specific view name
-// ViewData = new ViewDataDictionary(controller?.ViewData ?? new ViewDataDictionary(new EmptyModelMetadataProvider(), context.ModelState))
-// {
-//     Model = context.ActionArguments.Values.FirstOrDefault()
-// },
-// TempData = controller?.TempData
-
-
-// public void OnActionExecuting(ActionExecutingContext filterContext) {
-// throw new NotImplementedException();
-// }
-
-// public void OnActionExecuted(ActionExecutedContext filterContext) {
-// throw new NotImplementedException();
-// }

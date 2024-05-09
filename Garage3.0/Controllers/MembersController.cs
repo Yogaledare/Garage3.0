@@ -14,10 +14,12 @@ namespace Garage3._0.Controllers;
 public class MembersController : Controller {
     private readonly GarageDbContext _context;
     private readonly IMemberService _memberService;
+    private readonly IVehicleService _vehicleService;
 
-    public MembersController(GarageDbContext context, IMemberService memberService) {
+    public MembersController(GarageDbContext context, IMemberService memberService, IVehicleService vehicleService) {
         _context = context;
         _memberService = memberService;
+        _vehicleService = vehicleService;
     }
 
 
@@ -36,18 +38,14 @@ public class MembersController : Controller {
     [ValidateAntiForgeryToken]
     [ModelStateIsValid]
     public IActionResult CreateMember(CreateMemberViewModel input) {
-        // if (ModelState.IsValid) {
-            var member = new Member {
-                SocialSecurityNr = input.SocialSecurityNr,
-                Firstname = input.Firstname,
-                Surname = input.Surname,
-            };
+        var member = new Member {
+            SocialSecurityNr = input.SocialSecurityNr,
+            Firstname = input.Firstname,
+            Surname = input.Surname,
+        };
 
-            _memberService.RegisterMember(member);
-            return RedirectToAction(nameof(Index));
-
-        // Console.WriteLine("inside create member model state invalid");
-        // return View(input);
+        _memberService.RegisterMember(member);
+        return RedirectToAction(nameof(Index));
     }
 
 
@@ -83,9 +81,9 @@ public class MembersController : Controller {
 
     // GET: Members/5/RegisterVehicle
     [HttpGet("Members/{memberId:int}/CreateVehicle")]
+    [ModelStateIsValid]
     public IActionResult CreateVehicle(int memberId) {
-        Console.WriteLine("hello mum!");
-        var vehicleTypes = GetVehicleTypeOptions();
+        var vehicleTypes = _vehicleService.GetVehicleTypeOptions();
 
         var model = new CreateVehicleViewModel {
             MemberId = memberId,
@@ -128,33 +126,10 @@ public class MembersController : Controller {
             return RedirectToAction(nameof(Index));
         }
 
-        input.VehicleTypeOptions = GetVehicleTypeOptions();
-        Console.WriteLine("inside create vehicle model state invalid");
+        // I cant use the [ModelStateIsValid]-filter on this action method.
+        // The form will forget the list of vehicle types, and I will have nowhere to repopulate it if i use the filter. 
+        // If anyone reading this has a solution, please let me know! 
+        input.VehicleTypeOptions = _vehicleService.GetVehicleTypeOptions();
         return View(input);
     }
-
-    private List<SelectListItem> GetVehicleTypeOptions() {
-        return _context.VehicleTypes
-            .Select(vt => new SelectListItem {
-                Text = vt.VehicleTypeName,
-                Value = vt.VehicleTypeId.ToString()
-            })
-            .ToList();
-    }
 }
-
-
-// var existingMember = _context.Members.FirstOrDefault(x => x.SocialSecurityNr == input.SocialSecurityNr);
-// if (existingMember != null)
-// {
-//     ModelState.AddModelError(nameof(CreateMemberViewModel.SocialSecurityNr), "Social Security Number already exists.");
-//     return View(input);
-// }
-
-// var fullName = input.Firstname + " " + input.Surname;
-// var memberWithFullName = _context.Members.FirstOrDefault(x => (x.Firstname + " " + x.Surname) == fullName);
-// if (memberWithFullName != null)
-// {
-//     ModelState.AddModelError("", "A user with the same full name already exists.");
-//     return View(input);
-// }

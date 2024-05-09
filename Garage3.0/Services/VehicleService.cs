@@ -1,6 +1,7 @@
 ﻿using Garage3._0.Data;
 using Garage3._0.Models;
 using Garage3._0.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Garage3._0.Services;
@@ -69,5 +70,16 @@ public class VehicleService : IVehicleService {
 
         return model;
     }
+    
+    public List<SelectListItem> GetVehicleTypeOptions() {
+        return _context.VehicleTypes
+            .Select(vt => new SelectListItem {
+                Text = vt.VehicleTypeName,
+                Value = vt.VehicleTypeId.ToString()
+            })
+            .ToList();
+    }
+    
+    
 }
 
