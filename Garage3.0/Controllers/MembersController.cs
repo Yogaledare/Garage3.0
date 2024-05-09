@@ -34,9 +34,8 @@ public class MembersController : Controller {
     // POST: Members/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [ModelStateIsValid]
     public IActionResult CreateMember(CreateMemberViewModel input) {
-        // if (ModelState.IsValid) {
+        if (ModelState.IsValid) {
             var member = new Member {
                 SocialSecurityNr = input.SocialSecurityNr,
                 Firstname = input.Firstname,
@@ -45,9 +44,9 @@ public class MembersController : Controller {
 
             _memberService.RegisterMember(member);
             return RedirectToAction(nameof(Index));
+        }
 
-        // Console.WriteLine("inside create member model state invalid");
-        // return View(input);
+        return View(input);
     }
 
 
@@ -61,23 +60,26 @@ public class MembersController : Controller {
 
 
     [HttpPost]
-    [ModelStateIsValid]
     public IActionResult CreateVehicleType(CreateVehicleTypeViewModel model) {
-        var vehicleType = new VehicleType {
-            VehicleTypeName = model.VehicleTypeName,
-            ParkingSpaceRequirement = model.ParkingSpaceRequirement
-        };
+        if (ModelState.IsValid) {
+            var vehicleType = new VehicleType {
+                VehicleTypeName = model.VehicleTypeName,
+                ParkingSpaceRequirement = model.ParkingSpaceRequirement
+            };
 
-        foreach (var wheels in model.AllowedWheelNumbers) {
-            vehicleType.WheelConfigurations.Add(new WheelConfiguration {
-                NumWheels = wheels
-            });
+            foreach (var wheels in model.AllowedWheelNumbers) {
+                vehicleType.WheelConfigurations.Add(new WheelConfiguration {
+                    NumWheels = wheels
+                });
+            }
+
+            _context.VehicleTypes.Add(vehicleType);
+            _context.SaveChanges();
+
+            return RedirectToAction("CreateVehicle", "Members", new {memberId = model.MemberId});
         }
 
-        _context.VehicleTypes.Add(vehicleType);
-        _context.SaveChanges();
-
-        return RedirectToAction("CreateVehicle", "Members", new {memberId = model.MemberId});
+        return View(model);
     }
 
 

@@ -15,16 +15,21 @@
             <div class="form-group">
                 <label asp-for="VehicleTypeName">Vehicle Type Name</label>
                 <input asp-for="VehicleTypeName" class="form-control"/>
+                <span asp-validation-for="VehicleTypeName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ParkingSpaceRequirement">Parking Space Requirement</label>
                 <input asp-for="ParkingSpaceRequirement" type="number" class="form-control"/>
+                <span asp-validation-for="ParkingSpaceRequirement" class="text-danger"></span>
+
             </div>
 
             <div class="form-group">
                 <label>Allowed Wheel Numbers</label>
                 <div id="wheelNumbers">
                     <!-- Initially empty, filled by JavaScript -->
+                <span asp-validation-for="AllowedWheelNumbers" class="text-danger"></span>
+
                 </div>
                 @* <div class="row align-content-end"> *@
                 <button class="btn-warning btn" type="button" onclick="addWheelNumber()">Add Wheel Number</button>
@@ -32,7 +37,7 @@
             </div>
             @* <div class="row justify-content-start my-3"> *@
             <div class="btn-group my-3" role="group">
-            @* <div class="my-3"> *@
+                @* <div class="my-3"> *@
                 <button type="submit" class="btn btn-primary me-3">Create</button>
                 @* </div> *@
                 <a href="@Url.Action("CreateVehicle", "Members", new {memberId = Model.MemberId})" class="btn btn-secondary">Go Back</a>

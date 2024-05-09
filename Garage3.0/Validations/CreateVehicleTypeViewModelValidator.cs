@@ -27,9 +27,9 @@ namespace Garage3._0.Validations
             // Rule for AllowedWheelNumbers: required and must contain positive integers
             RuleFor(x => x.AllowedWheelNumbers)
                 .NotEmpty()
-                .WithMessage("Allowed Wheel Numbers cannot be empty.")
-                .Must(numbers => numbers.All(n => n > 0))
-                .WithMessage("All wheel numbers must be greater than 0.");
+                .WithMessage("Allowed Wheel Numbers cannot be empty.");
+            // .Must(numbers => numbers.All(n => n > 0))
+            // .WithMessage("All wheel numbers must be greater than 0.");
         }
 
         // Custom method to check if the Vehicle Type Name is unique in the database
