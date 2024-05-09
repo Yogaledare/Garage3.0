@@ -24,7 +24,7 @@ public class VehicleService : IVehicleService {
             OwnerMemberId = member.MemberId,
             OwnerFirstName = member.Firstname,
             OwnerLastName = member.Surname,
-            MembershipType = membership.Type,
+            Membership = membership,
             VehicleTypeName = vehicleTypeName,
             LicensePlate = vehicle.LicencePlate ?? string.Empty,
             ParkingStartedDateTime = parkingStartedDateTime,

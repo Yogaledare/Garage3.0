@@ -116,8 +116,7 @@ namespace Garage3._0.Data
                 for(int j =0; j <faker.Random.Int(1,5); j++)
                 {
                     var vehicle = new Vehicle
-                    {
-                    
+                    {                  
                         LicencePlate = faker.Random.Replace("???###"),
                         Color = faker.Commerce.Color(),
                         Brand = faker.Vehicle.Manufacturer(),

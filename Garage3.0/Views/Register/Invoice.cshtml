@@ -1,6 +1,15 @@
 ﻿@model Garage3._0.Models.ViewModels.VehicleViewModel
 @{
     ViewData["Title"] = "Invoice";
+    DateTime parkingStart = (DateTime)Model.ParkingStartedDateTime!;
+    DateTime parkingEnd = (DateTime)Model.ParkingEndedDateTime!;
+    DateTime membershipEnd = (DateTime)Model.Membership.EndDate;
+    int spotsTaken = Model.ParkingPlaces;
+    bool isProMember = membershipEnd > parkingEnd ? true : false;
+    double baseRate = 20.0;
+    double hourlyRate = 5.0;
+    double fee = CalculateParkingFee(spotsTaken, parkingStart, parkingEnd, membershipEnd, isProMember, baseRate, hourlyRate);
+
 }
 <body class="align-content-center">
     <div class="card" style="width: 18rem;">
@@ -21,11 +30,11 @@
                 <ul class="list-group list-group-flush">
                      <li class="list-group-item">Member: @Model.OwnerFirstName @Model.OwnerLastName</li>
                     <li class="list-group-item">LicensePlate: @Model.LicensePlate</li>
-                    <li class="list-group-item">Entered Time: @Model.ParkingStartedDateTime</li>
-                    <li class="list-group-item">Ended Time: @Model.ParkingEndedDateTime</li>
+                    <li class="list-group-item">Entered Time: @parkingStart</li>
+                    <li class="list-group-item">Ended Time: @parkingEnd</li>
                     <li class="list-group-item">Duration: @Model.ParkedTime.TotalHours.ToString("F2") hours</li>
                     <li class="list-group-item">
-                        Parking Fee:Price: @((Model.ParkedTime.TotalHours * 15).ToString("F2")) kr
+                        Parking Fee:Price: @fee.ToString("F2") kr
                     </li>
                 </ul>
             </div>
@@ -36,3 +45,54 @@
         </div>
     </div>
 </body>
+@functions {
+    public double CalculateParkingFee(int spotsTaken, DateTime parkingStartTime, DateTime parkingEndTime, DateTime membershipEndTime, bool isProMember, double baseRate, double hourlyRate)
+    {
+        double totalFee = 0;
+        if (isProMember)
+        {
+            var proDuration = parkingEndTime - parkingStartTime;
+            totalFee += CalculateFee(spotsTaken, proDuration, baseRate * 0.9, hourlyRate * (spotsTaken > 1 ? 0.9 : 1.0));
+        }
+        else
+        {
+            if(membershipEndTime > parkingStartTime)
+            {
+                var proD = membershipEndTime - parkingStartTime;
+                totalFee += CalculateFee(spotsTaken, proD, baseRate * 0.9, hourlyRate * (spotsTaken > 1 ? 0.9 : 1.0));
+                var duration = parkingEndTime - membershipEndTime;
+                totalFee += CalculateFee(spotsTaken, duration, baseRate, hourlyRate);
+            }
+            else
+            {
+                var duration = parkingEndTime - parkingStartTime;
+                totalFee += CalculateFee(spotsTaken, duration, baseRate, hourlyRate);
+            }
+        }
+        return totalFee;
+    }
+
+    private double CalculateFee(int spotsTaken, TimeSpan duration, double baseRate, double hourlyRate)
+    {
+        double adjustedBaseRate = baseRate;
+        double adjustedHourlyRate = hourlyRate;
+
+        // Adjust rates based on the number of spots taken
+        switch (spotsTaken)
+        {
+            case 1:
+                break; // No adjustment needed
+            case 2:
+                adjustedBaseRate *= 1.3;
+                adjustedHourlyRate *= 1.4;
+                break;
+            case 3:
+            default:
+                adjustedBaseRate *= 1.6;
+                adjustedHourlyRate *= 1.5;
+                break;
+        }
+
+        return adjustedBaseRate + adjustedHourlyRate * duration.TotalHours;
+    }
+}

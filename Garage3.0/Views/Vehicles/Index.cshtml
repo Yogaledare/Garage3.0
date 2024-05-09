@@ -32,7 +32,7 @@
         @foreach (var vehicle in Model.Vehicles) {
             <tr class="bg-light">
                 <td>@vehicle.OwnerName</td>
-                <td>@vehicle.MembershipType</td>
+                <td>@vehicle.Membership.Type</td>
                 <td>@vehicle.VehicleTypeName</td>
                 <td>@vehicle.LicensePlate</td>
                 <td>@vehicle.ParkingStartDisplay</td>

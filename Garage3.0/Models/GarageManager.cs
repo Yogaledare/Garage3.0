@@ -114,8 +114,10 @@ namespace Garage3._0.Models
             var vehicle = _context.Vehicles.Include(v => v.Member).FirstOrDefault(v => v.VehicleId == id);
             var parkingEvent = _context.ParkingEvents.Include(p => p.ParkingPlaces).First(p => p.VehicleID == id);
             var parkinglist = parkingEvent.ParkingPlaces.ToList();
+           
             if (vehicle != null && parkingEvent != null)
             {
+                var membership = _context.Memberships.FirstOrDefault(m => m.MemberID == vehicle.MemberId);
                 vehicle.ParkingEvent = null;
                 vehicle.ParkingEventID = null;
                 //try delete parkingevent and see if all parking spots is gone too, works
@@ -135,7 +137,9 @@ namespace Garage3._0.Models
                     OwnerLastName = vehicle.Member.Surname,
                     LicensePlate = vehicle.LicencePlate!,
                     ParkingStartedDateTime = parkingEvent.ArrivalTime,
-                    ParkingEndedDateTime = DateTime.Now
+                    ParkingEndedDateTime = DateTime.Now,
+                    Membership = membership ?? new Membership(),
+                    ParkingPlaces = parkinglist.Count
                 };
             }
             else
