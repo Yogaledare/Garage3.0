@@ -38,6 +38,7 @@ public class VehicleService : IVehicleService {
             .Include(v => v.VehicleType)
             .Include(v => v.Member)
             .ThenInclude(m => m.Membership)
+            .Include(v => v.ParkingEvent)
             .Where(v => v.ParkingEvent != null);
 
         if (queries.Length > 0) {
