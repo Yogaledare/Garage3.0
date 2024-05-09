@@ -32,26 +32,27 @@ public class VehicleService : IVehicleService {
     }
 
     private async Task<IEnumerable<VehicleViewModel>> GetParkedVehicleViewModels(string? searchQuery) {
-        var queries = searchQuery?.Split(' ') ?? [];
-
-        var vehiclesQuery = _context.Vehicles
+        var vehicles = await _context.Vehicles
             .Include(v => v.VehicleType)
             .Include(v => v.Member)
             .ThenInclude(m => m.Membership)
             .Include(v => v.ParkingEvent)
-            .Where(v => v.ParkingEvent != null);
+            .Where(v => v.ParkingEvent != null)
+            .ToListAsync();
 
-        if (queries.Length > 0) {
-            vehiclesQuery = vehiclesQuery.Where(v =>
-                queries.Any(query =>
-                    v.LicencePlate.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                    v.VehicleType.VehicleTypeName.Contains(query, StringComparison.OrdinalIgnoreCase)
+        if (!string.IsNullOrEmpty(searchQuery)) {
+            var queries = searchQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            vehicles = vehicles
+                .Where(v =>
+                    queries.Any(query =>
+                        v.LicencePlate.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        v.VehicleType.VehicleTypeName.Contains(query, StringComparison.OrdinalIgnoreCase)
+                    )
                 )
-            );
+                .ToList();
         }
 
-        var vehicles = await vehiclesQuery.ToListAsync(); 
-        
         var vehicleViewModels = vehicles
             .Select(v => CreateVehicleViewModel(v, v.Member, v.Member.Membership))
             .ToList();
@@ -66,6 +67,7 @@ public class VehicleService : IVehicleService {
             SearchQuery = searchQuery
         };
 
-        return model; 
+        return model;
     }
 }
+
